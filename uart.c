@@ -1,51 +1,43 @@
 #include "uart.h"
+#include <avr/io.h>
+#include <stdio.h>
 
-bool transmit_ready(void){
-	if(/*condition*/){
-		return 0;
-	}
-	return 1;
-}
 
-unsigned int USART_Resceive(void){
-	unsigned char status, resh, rel;
-	
-	while(!(UCSRA0 & (1<<RXC0)))
-		status = UCRSA0;
-		resh = UCRSB0;
-		resl = UDR0;
-	
-	if (status & (1<<FE) | (1<<DOR) | (1<<UPE))
-		return -1;
-	
-	
-	resh = (resh >> 1) & 0x01;
-	return ((resh << 8) | resl);
+void USART_Init( unsigned int ubrr ){
+	/* Set baud rate */
+	UBRR0H = (unsigned char)(ubrr>>8);
+	UBRR0L = (unsigned char)ubrr;
+	/* Enable receiver and transmitter */
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+	/* Set frame format: 8data, 2stop bit */
+	UCSR0C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
 }
 
 
-unsigned char USART_Receive( void ){
+
+unsigned char USART_Receive(void){
 /* Wait for data to be received */
-while ( !(UCSRA & (1<<RXC)) );
+while ( !(UCSR0A & (1<<RXC0)) );
 /* Get and return received data from buffer */
-return UDR;
+return UDR0;
 }
 
 
 
-//void USART_Transmit( unsigned char data ){
-/* Wait for empty transmit buffer */
-//while ( !( UCSRA & (1<<UDRE)) );
+void USART_Transmit( unsigned char data ){
+ /*Wait for empty transmit buffer */
+while ( !( UCSR0A & (1<<UDRE0)) );
 /* Put data into buffer, sends the data */
-//UDR = data;
-//}/*
-
-
-
-void USART_Transmit( unsigned int data ){
-/* Wait for empty transmit buffer */
-while ( !( UCSRA & (1<<UDRE)) );
-/* Copy 9th bit to TXB8 */UCSRB &= ~(1<<TXB8);if ( data & 0x0100 )UCSRB |= (1<<TXB8);/* Put 
-data into buffer, sends the data */
-UDR = data;
+UDR0 = data;
 }
+
+
+//void USART_Transmit( unsigned int data ){
+/* Wait for empty transmit buffer */
+//while ( !( UCSR0A & (1<<UDRE0)) );
+/* Copy 9th bit to TXB8 *///UCSR0B &= ~(1<<TXB80);if ( data & 0x0100 )UCSR0B |= (1<<TXB80);/* Put 
+//data into buffer, sends the data */
+//UDR0 = data;
+//}
+
+
