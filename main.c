@@ -17,12 +17,14 @@ void main(void){
 	
 
 	while(1){
-		//unsigned char a = USART_Receive();
-		USART_Transmit("a");
-		USART_Transmit("b");
-		USART_Transmit("z");
-		printf("a");
-
+		//USART_Transmit('a');
+		unsigned char test = USART_Receive();
+		if(UDR0 != 0){
+			printf("hei");
+			
+		}
+		
+		
 		/*if(USART_Receive() == 'a'){
 			PORTB = (1<<PB0);
 			_delay_ms(1500);
