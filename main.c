@@ -12,18 +12,15 @@
 
 
 void main(void){
-	PORTA = (0<<PORTA0)|(0<<PORTA1);
-	MCUCR = (1<<SRE);
-	USART_Init(MYUBRR);
-	SRAM_initialize();
-	SRAM_test();
-	DDRA = 0xFF;
+	//PORTA = (0<<PORTA0)|(0<<PORTA1);
+	/*DDRA = 0xFF;
 	DDRB = 0xFF;
-	DDRE = 0xFF;
+	DDRE = 0xFF;*/
+	MCUCR = (1 << SRE); 
+	SFIOR = (1 << XMM2);		//når denne brukes kan man ikke sette registre selv
+	USART_Init(MYUBRR);
+	SRAM_test();
 	
-	
-
-
 }
 
 
