@@ -1,5 +1,5 @@
 
-#include "io.h"
+//#include "io.h"
 #include <avr/io.h>
 #include <util/delay.h>
 #include "uart.h"
@@ -12,21 +12,58 @@
 
 
 void main(void){
-
-	DDRB = 1;
+	PORTA = (0<<PORTA0)|(0<<PORTA1);
+	MCUCR = (1<<SRE);
 	USART_Init(MYUBRR);
+	SRAM_initialize();
+	SRAM_test();
+	DDRA = 0xFF;
+	DDRB = 0xFF;
+	DDRE = 0xFF;
+	
 	
 
-	while(1){
-		//USART_Transmit('a');
+
+}
+
+
+//sudo picocom -b 9600 -r -l /dev/ttyS0
+
+
+	
+	/*while(1){
+		USART_Transmit('a'); //day 2
 		unsigned char test = USART_Receive();
 		if(UDR0 != 0){
-			printf("hei");
-			
+			printf("hei");			
 		}
+
 		
 		
-		/*if(USART_Receive() == 'a'){
+		PORTE = (0<<PORTE1);
+		PORTA = 0xFF;
+		_delay_ms(100);
+		PORTE = (1<<PORTE1);
+		_delay_ms(1500);
+		PORTE &= ~(1<<PORTE1);
+		PORTA &= ~(1<<PORTA0);
+		_delay_ms(1000);
+		PORTA = (1<<PORTA0);
+
+		_delay_ms(5000);
+
+		PORTE = (0<<PORTE1);
+		PORTA = 0x00;
+		_delay_ms(100);
+		PORTE = (1<<PORTE1);
+		_delay_ms(1500);
+		PORTE &= ~(1<<PORTE1);
+		PORTA &= ~(1<<PORTA0);
+		_delay_ms(1000);
+		PORTA = (1<<PORTA0);
+		
+		
+		if(USART_Receive() == 'a'){ //day 2
 			PORTB = (1<<PB0);
 			_delay_ms(1500);
 			PORTB = (0<<PB0);
@@ -34,18 +71,6 @@ void main(void){
 			printf("a");
 			USART_Transmit("a");
 			
-		}*/
-	}
-
-
-	/*while(1){              day 1 test function
-		PORTB = (1<<PB0);
-		_delay_ms(1500);
-		PORTB = (0<<PB0);
-		_delay_ms(1500);
-	
-	}*/	
-}
-
-
-//sudo picocom -b 9600 -r -l /dev/ttyS0
+		}
+		
+	}*/
