@@ -12,13 +12,14 @@ void SRAM_initialize(void){
 
 void SRAM_test(void){
     volatile char *ext_ram = (char*) 0x1800;//start adress for the SRAM
-    uint16_t ext_ram_size = 0x1800;
+    uint16_t ext_ram_size = 0x800;
     uint16_t write_errors= 0;
     uint16_t retrieval_errors= 0;
     printf("Starting SRAM test...\n");
     // rand() stores some internal state, so calling this function in a loop will
-    // yield different seeds each time (unless srand() is called before this function)
-    uint16_t seed = rand();
+    // yield different seeds each time (unless0 srand() is called before this function)
+    uint16_t seed = 0;
+    srand(seed);
     // Write phase: Immediately check that the correct value was storedsrand(seed);
     for (uint16_t i = 0; i < ext_ram_size; i++) {
         uint8_t some_value = rand();
@@ -29,6 +30,7 @@ void SRAM_test(void){
             write_errors++;
             }
     }
+    srand(seed);
     // Retrieval phase: Check that no values were changed during or after the write phasesrand(seed);
     // reset the PRNG to the stateit had before the write phase
     for (uint16_t i = 0; i < ext_ram_size; i++) {

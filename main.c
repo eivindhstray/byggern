@@ -13,13 +13,17 @@
 
 void main(void){
 	//PORTA = (0<<PORTA0)|(0<<PORTA1);
-	/*DDRA = 0xFF;
+	DDRA = 0xFF;
 	DDRB = 0xFF;
-	DDRE = 0xFF;*/
-	MCUCR = (1 << SRE); 
-	SFIOR = (1 << XMM2);		//når denne brukes kan man ikke sette registre selv
+	DDRE = 0xFF;
 	USART_Init(MYUBRR);
-	SRAM_test();
+
+	MCUCR = (1 << SRE); 
+	SFIOR = (1 <<  XMM2);		//når denne brukes kan man ikke sette registre selv
+	while(1){
+		volatile char *ext_ram = (char*) 0x1400;
+		ext_ram[0] = 0x1400;
+	}
 	
 }
 
