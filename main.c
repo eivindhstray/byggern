@@ -18,11 +18,12 @@ void main(void){
 	DDRE = 0xFF;
 	USART_Init(MYUBRR);
 
-	MCUCR = (1 << SRE); 
-	SFIOR = (1 <<  XMM2);		//når denne brukes kan man ikke sette registre selv
+	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
+	SFIOR = (1 <<  XMM2);		
+	
+	volatile char *ext_ram = (char*) 0x1F00;
 	while(1){
-		volatile char *ext_ram = (char*) 0x1400;
-		ext_ram[0] = 0x1400;
+		ext_ram[0] = 0x0001;
 	}
 	
 }
