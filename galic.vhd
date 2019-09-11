@@ -16,6 +16,7 @@ entity adress_decoder is
     attribute LOC : string;
     attribute LOC of ram_cs     : signal is "P19";
     attribute LOC of adc_cs     : signal is "P18";
+    attribute LOC of oled_cs     : signal is "P17";
     attribute LOC of oled_dc    : signal is "P16";
 
 
@@ -27,8 +28,8 @@ end address_decoder;
 
 architecture behave of address_decoder is begin
     --implement functionality here
-    oled_1 = [0x1000 (0001 0000 0000 0000), 0x11FF (0001 0001 1111 1111)]
-    oled_2 = [(0001 0010 0000 0000) , (0001 0011 1111 1111)
-    adc = [0001 0100 0000 0000 , 0001 0111 1111 1111]
-    sram = [0001 1000 0000 0000 , 0001 1111 1111 1111]
+    oled_cs <= a11 or a10 or a9;
+    oled_dc <= a11 or a10 or not a9;
+    adc_cs <= a11 or not a10;
+    ram_cs <= (a11);
 end behave;

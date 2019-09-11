@@ -1,5 +1,6 @@
 
 //#include "io.h"
+//#include "adc.h"
 #include <avr/io.h>
 #include <util/delay.h>
 #include "uart.h"
@@ -16,14 +17,23 @@ void main(void){
 	DDRA = 0xFF;
 	DDRB = 0xFF;
 	DDRE = 0xFF;
-	USART_Init(MYUBRR);
-
+	//USART_Init(MYUBRR);
+	//SRAM_initialize();
+	DDRD = 0x00;
+	PORTD = 0xFF;
 	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
 	SFIOR = (1 <<  XMM2);		
 	
-	volatile char *ext_ram = (char*) 0x1F00;
+
+	
+
+	volatile char *ext_ram = (char*) 0x1400;
+
+	
 	while(1){
-		ext_ram[0] = 0x0001;
+		_delay_ms(1000);
+		ext_ram[0] = 0x0004;
+		_delay_ms(1000);
 	}
 	
 }

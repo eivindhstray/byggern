@@ -6,7 +6,7 @@
 
 
 void SRAM_initialize(void){
-    //MCUCR = (1<<SRE);
+    MCUCR = (1<<SRE);
 }
 
 
