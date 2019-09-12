@@ -1,6 +1,7 @@
 
-//#include "io.h"
-//#include "adc.h"
+#include "io.h"
+#include "adc.h"
+#include <stdint.h>
 #include <avr/io.h>
 #include <util/delay.h>
 #include "uart.h"
@@ -17,7 +18,7 @@ void main(void){
 	DDRA = 0xFF;
 	DDRB = 0xFF;
 	DDRE = 0xFF;
-	//USART_Init(MYUBRR);
+	USART_Init(MYUBRR);
 	//SRAM_initialize();
 	DDRD = 0x00;
 	PORTD = 0xFF;
@@ -25,18 +26,41 @@ void main(void){
 	SFIOR = (1 <<  XMM2);		
 	
 
-	
 
-	volatile char *ext_ram = (char*) 0x1400;
+	
 
 	
 	while(1){
 		_delay_ms(1000);
-		ext_ram[0] = 0x0004;
+		
+		printf("positiony: %u \n\r", y_pos());
+		_delay_ms(200);
+		printf("positionx: %u \n\r", x_pos());
 		_delay_ms(1000);
-	}
-	
+		/*printf("position slider left: %d \n\r", l_slider());
+		_delay_ms(1000);
+		printf("position slider right %d \n\r", r_slider());*/
+	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //sudo picocom -b 9600 -r -l /dev/ttyS0

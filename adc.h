@@ -1,9 +1,16 @@
 
 
 
-struct joystick{
-    int x_pos;
-    int y_pos;
-}
 
-void adc_init(void);
+
+
+
+
+int y_pos(void);
+
+int x_pos(void);
+
+int l_slider(void);
+
+int r_slider(void);
+
