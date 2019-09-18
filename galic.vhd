@@ -28,8 +28,8 @@ end address_decoder;
 
 architecture behave of address_decoder is begin
     --implement functionality here
-    oled_cs <= a11 or a10 or a9;
-    oled_dc <= a11 or a10 or not a9;
+    oled_cs <= a11 or a10;
+    oled_dc <= a9;
     adc_cs <= a11 or not a10;
     ram_cs <= (a11);
 end behave;

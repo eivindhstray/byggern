@@ -5,6 +5,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "uart.h"
+#include "oled.h"
 #define F_CPU 4195200UL
 #include <stdio.h>
 #define FOSC 4195200// Clock Speed
@@ -25,6 +26,32 @@ void main(void){
 	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
 	SFIOR = (1 <<  XMM2);		
 	
+	
+
+	oled_init();
+
+	_delay_ms(100);
+
+	oled_reset();
+	
+
+	_delay_ms(100);
+
+	oled_select_line(0);
+	print_string("WELCOME");
+
+	
+	oled_select_line(5);
+
+
+	/*while(1){
+		oled_scroll();
+		_delay_ms(1000);
+	}
+
+	print_string("yolo");
+
+	*/	
 
 
 	
