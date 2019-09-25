@@ -11,10 +11,8 @@ void oled_init(void);
 
 void oled_reset(void);
 
-void oled_down(int nrows);
-
 void oled_select_line(int row);
 
 void print_string(char* content);
 
-void oled_scroll(void);
+int oled_scroll(void);

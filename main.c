@@ -30,59 +30,33 @@ void main(void){
 
 	oled_init();
 
-	_delay_ms(100);
-
 	oled_reset();
-	
-
-	_delay_ms(100);
-
-	oled_select_line(0);
-	print_string("WELCOME");
 
 	
+	OLED.line = 1;
 	oled_select_line(5);
-
-
-	/*while(1){
-		oled_scroll();
-		_delay_ms(1000);
-	}
-
-	print_string("yolo");
-
-	*/	
-
-
-	
-
-	
 	while(1){
+		if(oled_scroll()==1){
+			print_string("test");
+		}
 		_delay_ms(1000);
 		
-		printf("positiony: %u \n\r", y_pos());
-		_delay_ms(200);
-		printf("positionx: %u \n\r", x_pos());
-		_delay_ms(1000);
-		/*printf("position slider left: %d \n\r", l_slider());
-		_delay_ms(1000);
-		printf("position slider right %d \n\r", r_slider());*/
-	}	
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
