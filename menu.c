@@ -40,7 +40,7 @@ void write_main_menu(void){
     oled_reset();
     oled_select_indicator(1);
     oled_select_line(1);
-    print_string("WELCOME");
+    print_string("WELCOME CUNT");
     oled_select_line(2);
     print_string("PLAY");
     oled_select_line(3);
@@ -52,10 +52,11 @@ void write_main_menu(void){
 
 void write_settings_menu(void){
     oled_reset();
-    
     oled_select_line(1);
-    print_string("BRIGHTNESS");
+    print_string("SETTINGS");
     oled_select_line(2);
+    print_string("BRIGHTNESS");
+    oled_select_line(3);
     print_string("FONTSIZE");
     oled_select_indicator(OLED.line);
     
@@ -64,10 +65,11 @@ void write_settings_menu(void){
 
 void write_music_menu(void){
     oled_reset();
-    
     oled_select_line(1);
-    print_string("ON");
+    print_string("MUSIC");
     oled_select_line(2);
+    print_string("ON");
+    oled_select_line(3);
     print_string("OFF");
     oled_select_indicator(OLED.line);
     
