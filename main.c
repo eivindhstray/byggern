@@ -12,6 +12,7 @@
 #define BAUD 9600
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 31
+#include "menu.h"
 
 
 void main(void){
@@ -33,19 +34,15 @@ void main(void){
 	oled_reset();
 
 	
-	oled_select_line(1);
-	print_string("linje1");
-	oled_select_line(2);
-	print_string("hello");
-	oled_select_line(3);
-	print_string("settings");
-	oled_select_indicator(2);
+	write_main_menu();
+	
 
 	while(1){
-		if(oled_scroll()==1){
-			oled_select_indicator(OLED.line);
-			
-		}
+		oled_scroll();
+		oled_select_indicator(OLED.line);	
+		menu_navigate();
+		_delay_ms(100);
+		printf("%i",x_pos());
 	}
 	
 

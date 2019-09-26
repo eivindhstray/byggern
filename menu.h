@@ -1,9 +1,28 @@
-struct node{
+#ifndef _MENU_H_
+#define _MENU_H_
+#include <stdlib.h>
+
+#endif
+
+typedef struct node{
     
-    struct node *select;
-    struct node *prev;
-    struct node *mainMenu;
+    struct node_t * prev;
+    struct node_t * select;
+    
+    
 }node_t;
 
 
-void menu_build(node_t * mainMenu);
+node_t menu_build();
+
+
+void write_main_menu(void);
+
+void write_settings_menu(void);
+
+void write_music_menu(void);
+
+int menu_choice();
+
+void menu_navigate(void);
+

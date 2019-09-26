@@ -4,6 +4,7 @@
 #include <string.h>
 #include "adc.h"
 #include <util/delay.h>
+#include <stdlib.h>
 
 volatile uint8_t *oled_command = (char*) 0x1000;
 volatile uint8_t *oled_data = (char*) 0x1200;
@@ -96,6 +97,7 @@ void oled_remove_marker(void){
             oled_write_data(0x00);
         }
     }
+    oled_select_line(OLED.line);
 }
 
 
@@ -110,25 +112,25 @@ void oled_select_indicator(int row){
     oled_write_c(0x7f);         //col 127
     print_string("<-");
     OLED.line = row;
+    oled_select_line(OLED.line);
 }
 
 
 int oled_scroll(void){
     
     if (y_pos() == 0 && OLED.line<8){
-        
         OLED.line += 1;
         
         oled_select_line(OLED.line);
-        _delay_ms(2000);
+        _delay_ms(1000);
         return 1;    
     }
-    if (y_pos() == 255 && OLED.line>0){
-            OLED.line -= 1;
+    if (y_pos() >= 230 && OLED.line>0){
+        OLED.line -= 1;
         
         
         oled_select_line(OLED.line);
-        _delay_ms(2000);
+        _delay_ms(1000);
         return 1;
     }
     return 0;

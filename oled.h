@@ -1,6 +1,11 @@
+typedef enum SCREEN{MAIN,PLAY,SETTINGS,MUSIC}screen_t;
+
 
 struct OLED{
     int line;
+    screen_t screen;
+    
+
 }OLED;
 
 void oled_write_c(char command);
