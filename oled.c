@@ -125,7 +125,7 @@ int oled_scroll(void){
         _delay_ms(1000);
         return 1;    
     }
-    if (y_pos() >= 230 && OLED.line>2){ //such that it does not seem that one can "select" the upper information line
+    if (y_pos() >= 230 && OLED.line>3){ //such that it does not seem that one can "select" the upper information line and the blank space.
         OLED.line -= 1;
         
         

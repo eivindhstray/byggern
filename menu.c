@@ -41,11 +41,11 @@ void write_main_menu(void){
     oled_select_indicator(1);
     oled_select_line(1);
     print_string("WELCOME CUNT");
-    oled_select_line(2);
-    print_string("PLAY");
     oled_select_line(3);
-    print_string("SETTINGS");
+    print_string("PLAY");
     oled_select_line(4);
+    print_string("SETTINGS");
+    oled_select_line(5);
     print_string("MUSIC ON/OFF");
     oled_select_indicator(OLED.line);
 }
@@ -54,9 +54,9 @@ void write_settings_menu(void){
     oled_reset();
     oled_select_line(1);
     print_string("SETTINGS");
-    oled_select_line(2);
-    print_string("BRIGHTNESS");
     oled_select_line(3);
+    print_string("BRIGHTNESS");
+    oled_select_line(4);
     print_string("FONTSIZE");
     oled_select_indicator(OLED.line);
     
@@ -67,9 +67,9 @@ void write_music_menu(void){
     oled_reset();
     oled_select_line(1);
     print_string("MUSIC");
-    oled_select_line(2);
-    print_string("ON");
     oled_select_line(3);
+    print_string("ON");
+    oled_select_line(4);
     print_string("OFF");
     oled_select_indicator(OLED.line);
     
@@ -90,11 +90,11 @@ int menu_choice(){
 
 void menu_navigate(void){
 
-    if (OLED.screen == MAIN && OLED.line == 3 && menu_choice() == 2){
+    if (OLED.screen == MAIN && OLED.line == 4 && menu_choice() == 2){
         write_settings_menu();
         OLED.screen = SETTINGS;
     }
-    if (OLED.screen == MAIN && OLED.line == 4 && menu_choice() == 2){
+    if (OLED.screen == MAIN && OLED.line == 5 && menu_choice() == 2){
         write_music_menu();
         OLED.screen = MUSIC;
     }
