@@ -53,13 +53,13 @@ void oled_init(void){
 
 
 void oled_reset(void){
-    oled_write_c(0xb0);        //set ro0xb0
+    oled_write_c(0xb0);        //set row 0xb0
     oled_write_c(0x21);        //select0xb0d the size of col
     oled_write_c(0); 
     oled_write_c(0x7f);         
     oled_write_c(0x22);        //select0xb0d the size of row
     oled_write_c(0x00);
-    oled_write_c(0x09);
+    oled_write_c(0x07);
     int rows = 9;
     int cols = 128;
     for(int i = 0; i<rows; i++){
@@ -71,31 +71,33 @@ void oled_reset(void){
     oled_write_c(0xb0);             //to whereever we want to write
 }
 
-void oled_select_line(int row){  
-    oled_write_c(0x0b + row-1);
+void oled_select_line(int row){ 
+    oled_write_c(0x22);
+    oled_write_c(0x00);
+    oled_write_c(0x07);
+    oled_write_c(0xb0 + row-1);
     oled_write_c(0x21);        //select col and the size of col
     oled_write_c(0); 
     oled_write_c(0x7f);         //col 127
-    OLED.line = row-1;
+    OLED.line = row;
 }
 
 
 int oled_scroll(void){
     
-    if (y_pos() == 0){
-        if (OLED.line>=1){
-            OLED.line -= 1;
-        }
+    if (y_pos() == 0 && OLED.line<8){
+        OLED.line += 1;
         oled_reset();
         oled_select_line(OLED.line);
+        
         return 1;    
     }
-    if (y_pos() == 255){
-        if (OLED.line<=10){
-            OLED.line += 1;
-        }
+    if (y_pos() == 255 && OLED.line>0){
+            OLED.line -= 1;
+        
         oled_reset();
         oled_select_line(OLED.line);
+        
         return 1;
     }
     return 0;

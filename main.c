@@ -32,13 +32,14 @@ void main(void){
 
 	oled_reset();
 
+
 	
 	OLED.line = 1;
-	oled_select_line(5);
 	while(1){
 		if(oled_scroll()==1){
-			print_string("test");
+			print_string("yolo");
 		}
+		printf("%i", OLED.line);
 		_delay_ms(1000);
 		
 	}
