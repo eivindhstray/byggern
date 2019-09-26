@@ -16,3 +16,7 @@ void oled_select_line(int row);
 void print_string(char* content);
 
 int oled_scroll(void);
+
+void oled_select_indicator(int row);
+
+void oled_remove_marker(void);

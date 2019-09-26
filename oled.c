@@ -82,22 +82,53 @@ void oled_select_line(int row){
     OLED.line = row;
 }
 
+void oled_remove_marker(void){
+             
+    oled_write_c(0x22);        //select0xb0d the size of row
+    oled_write_c(0x00);
+    oled_write_c(0x07);
+    for (int j = 0; j<8; j++){
+        oled_write_c(0x21);        //select0xb0d the size of col
+        oled_write_c(0x70); 
+        oled_write_c(0x7f);
+        oled_write_c(0xb0 + j);
+        for (int i = 112; i<127; i++){
+            oled_write_data(0x00);
+        }
+    }
+}
+
+
+void oled_select_indicator(int row){
+    oled_remove_marker();
+    oled_write_c(0x22);
+    oled_write_c(0x00);
+    oled_write_c(0x07);
+    oled_write_c(0xb0 + row-1);
+    oled_write_c(0x21);        //select col and the size of col
+    oled_write_c(0x70); 
+    oled_write_c(0x7f);         //col 127
+    print_string("<-");
+    OLED.line = row;
+}
+
 
 int oled_scroll(void){
     
     if (y_pos() == 0 && OLED.line<8){
-        OLED.line += 1;
-        oled_reset();
-        oled_select_line(OLED.line);
         
+        OLED.line += 1;
+        
+        oled_select_line(OLED.line);
+        _delay_ms(2000);
         return 1;    
     }
     if (y_pos() == 255 && OLED.line>0){
             OLED.line -= 1;
         
-        oled_reset();
-        oled_select_line(OLED.line);
         
+        oled_select_line(OLED.line);
+        _delay_ms(2000);
         return 1;
     }
     return 0;

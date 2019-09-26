@@ -32,18 +32,22 @@ void main(void){
 
 	oled_reset();
 
-
 	
-	OLED.line = 1;
+	oled_select_line(1);
+	print_string("linje1");
+	oled_select_line(2);
+	print_string("hello");
+	oled_select_line(3);
+	print_string("settings");
+	oled_select_indicator(2);
+
 	while(1){
 		if(oled_scroll()==1){
-			print_string("yolo");
+			oled_select_indicator(OLED.line);
+			
 		}
-		printf("%i", OLED.line);
-		_delay_ms(1000);
-		
 	}
-
+	
 
 
 
