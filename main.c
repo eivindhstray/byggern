@@ -1,4 +1,9 @@
 
+
+#ifndef F_CPU
+#define F_CPU 4915200UL
+#endif
+
 #include "io.h"
 #include "adc.h"
 #include <stdint.h>
@@ -6,9 +11,10 @@
 #include <util/delay.h>
 #include "uart.h"
 #include "oled.h"
-#define F_CPU 4195200UL
+
+
 #include <stdio.h>
-#define FOSC 4195200// Clock Speed
+//#define FOSC 4915200UL// Clock Speed
 #define BAUD 9600
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 31
@@ -36,12 +42,15 @@ void main(void){
 	
 	write_main_menu();
 	
+	//DDRB |= (1 << PB0);
+
 
 	while(1){
+		//PORTB ^= (1 << PB0);
 		oled_scroll();
 		oled_select_indicator(OLED.line);	
 		menu_navigate();
-		_delay_ms(100);
+		//_delay_ms(2000);
 		printf("%i",x_pos());
 	}
 	
