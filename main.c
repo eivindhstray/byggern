@@ -12,6 +12,8 @@
 #include "uart.h"
 #include "oled.h"
 
+#include "spi.h"
+
 
 #include <stdio.h>
 //#define FOSC 4915200UL// Clock Speed
