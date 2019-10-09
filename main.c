@@ -11,8 +11,9 @@
 #include <util/delay.h>
 #include "uart.h"
 #include "oled.h"
-
+#include "mcp.h"
 #include "spi.h"
+#include "can.h"
 
 
 #include <stdio.h>
@@ -43,21 +44,35 @@ void main(void){
 
 	
 	write_main_menu();
-	
+
+	message_t message;
+	message.id = 0b11;
+	message.length = 2;
+	message.data[0] = 1;
+	message.data[1] = 2;
 	//DDRB |= (1 << PB0);
 
-
+	spi_master_init();
+	//spi_slave_init();
+	//mcp_reset();
 	while(1){
 		//PORTB ^= (1 << PB0);
 		oled_scroll();
 		oled_select_indicator(OLED.line);	
 		menu_navigate();
-		//_delay_ms(2000);
-		printf("%i",x_pos());
+		_delay_ms(200);
+		//spi_read();
+		//printf(spi_read());
+		can_send_message(message);
+		message_t m = can_receive_message();
+		printf("message_data %d\r\n", m.data, "message_length %d\r\n", m.length);
+		_delay_ms(200);
+		mcp_reset();
+
+		
 	}
 	
-
-
+	
 
 
 
