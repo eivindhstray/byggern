@@ -60,13 +60,10 @@ void main(void){
 		oled_scroll();
 		oled_select_indicator(OLED.line);	
 		menu_navigate();
-		_delay_ms(200);
-		//spi_read();
-		//printf(spi_read());
 		can_send_message(message);
 		message_t m = can_receive_message();
-		printf("message_data %d\r\n", m.data, "message_length %d\r\n", m.length);
-		_delay_ms(200);
+		printf("message_data %d\r\n", m.data);
+		printf("message_length %d\r\n", m.length);
 		mcp_reset();
 
 		
