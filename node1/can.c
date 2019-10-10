@@ -56,9 +56,13 @@ void can_send_message(message_t* message){
 
 void can_receive_message(message_t* message){
 
-
+/* With * and /
     uint8_t id_high = mcp_read(MCP_RXB0SIDH)*0b1000;
     uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
+*/
+    //With shifting bits
+    uint8_t id_high = mcp_read(MCP_RXB0SIDH)<<3;
+    uint8_t id_low = mcp_read(MCP_RXB0SIDL)>>5;
 
     message->id = id_high + id_low;
 
