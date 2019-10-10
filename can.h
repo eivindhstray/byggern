@@ -1,7 +1,7 @@
 typedef struct message{
-    int id;
-    int length;
-    int data[8];
+    uint8_t id;
+    uint8_t length;
+    uint8_t data[8];
 }message_t;
 
 

@@ -46,7 +46,7 @@ void main(void){
 	write_main_menu();
 
 	message_t yolo;
-	yolo.id = 0b1010;
+	yolo.id = 0b11;
 	yolo.length = 4;
 	yolo.data[0] = 1;
 	yolo.data[1] = 3;
@@ -54,17 +54,17 @@ void main(void){
 	yolo.data[3] = 7;
 	//DDRB |= (1 << PB0);
 
-	spi_master_init();
+	//spi_master_init();
 	//spi_slave_init();
 	/*while(mcp_read(0x0E) != 128){
 		mcp_reset();
 		printf("Trying to reset mcp2515\n\r");
 	}*/
-	
-	printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
 	mcp_init();
+	can_init();
+	printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
 	while(1){
-		printf("ready? %d", mcp_ready_to_send());
+		//printf("ready? %d", mcp_ready_to_send());
 		//PORTB ^= (1 << PB0);
 		oled_scroll();
 		oled_select_indicator(OLED.line);	
@@ -73,9 +73,12 @@ void main(void){
 		_delay_ms(100);
 		//printf("CANSTAT: %d\n\r", mcp_read(0x0E));
 		message_t test;
+		
+		printf("yolo length: %d \n\r", yolo.length);
 		can_receive_message(&test);
-		//printf("message_data %d\r\n", test.data[0]);
-		//printf("message_length %d\r\n", test.length);
+		printf("message_data %d\r\n", test.data[3]);
+		printf("message_length %d\r\n", test.length);
+		printf("id %d\n\r", test.id);
 		
 
 		

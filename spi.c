@@ -21,26 +21,27 @@ void set_CS(int value){
 void spi_master_init(void){
     
     DDRB = (1<<PB5) | (1<<PB7) | (1<<PB4); //set MOSI and SCK output, all others input
-    SPCR = (1<<SPE) | (1<<MSTR) | (1<<SPR0) | (1<<SPIE); //enable spi, master, set clock rate fck/16
+    DDRB &= ~(1<<PB6);
+    SPCR = (1<<SPE) | (1<<MSTR) | (1<<SPR0) /*| (1<<SPIE)*/; //enable spi, master, set clock rate fck/16
     spi_set_ss(1);
 }
 
 void spi_master_transmit(char cData){
-    spi_set_ss(0);
+    //spi_set_ss(0);
     SPDR = cData; //start transmission
     while(!(SPSR & (1<<SPIF)))//wait for transmission complete
     ;
-    spi_set_ss(1);
+    //spi_set_ss(1);
 }
 
 
 
 int spi_read(){
-    spi_set_ss(0);
+    //spi_set_ss(0);
     SPDR = 0xFF;
     while(!(SPSR & (1<<SPIF))) //Wait for reception complete
     ;
-    spi_set_ss(1);
+   // spi_set_ss(1);
     return SPDR; //return data register
 ;
 }
