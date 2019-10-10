@@ -45,26 +45,38 @@ void main(void){
 	
 	write_main_menu();
 
-	message_t message;
-	message.id = 0b11;
-	message.length = 2;
-	message.data[0] = 1;
-	message.data[1] = 2;
+	message_t yolo;
+	yolo.id = 0b1010;
+	yolo.length = 4;
+	yolo.data[0] = 1;
+	yolo.data[1] = 3;
+	yolo.data[2] = 3;
+	yolo.data[3] = 7;
 	//DDRB |= (1 << PB0);
 
 	spi_master_init();
 	//spi_slave_init();
-	//mcp_reset();
+	/*while(mcp_read(0x0E) != 128){
+		mcp_reset();
+		printf("Trying to reset mcp2515\n\r");
+	}*/
+	
+	printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
+	mcp_init();
 	while(1){
+		printf("ready? %d", mcp_ready_to_send());
 		//PORTB ^= (1 << PB0);
 		oled_scroll();
 		oled_select_indicator(OLED.line);	
 		menu_navigate();
-		can_send_message(message);
-		message_t m = can_receive_message();
-		printf("message_data %d\r\n", m.data);
-		printf("message_length %d\r\n", m.length);
-		mcp_reset();
+		can_send_message(&yolo);
+		_delay_ms(100);
+		//printf("CANSTAT: %d\n\r", mcp_read(0x0E));
+		message_t test;
+		can_receive_message(&test);
+		//printf("message_data %d\r\n", test.data[0]);
+		//printf("message_length %d\r\n", test.length);
+		
 
 		
 	}

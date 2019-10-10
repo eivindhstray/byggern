@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "spi.h"
 #include <inttypes.h>
+#include <util/delay.h>
 
 void mcp_init(void){
     spi_master_init();
@@ -16,7 +17,7 @@ int mcp_read(int address){  //for some reason we are not allowed to use uint8_t
     
     spi_master_transmit(MCP_READ);
     spi_master_transmit(address);
-    uint8_t data = spi_read();
+    int data = spi_read();
     return data;
     
 }
@@ -33,6 +34,7 @@ void mcp_write(int address, int data){
 void mcp_reset(void){
     
     spi_master_transmit(MCP_RESET);
+    _delay_ms(200);
     
 }
 
@@ -42,9 +44,14 @@ int mcp_read_status(void){
     return MCP_READ_STATUS;
 }
 
-
+int mcp_ready_to_send(void){
+    if( (MCP_TXB0CTRL & (1<<3)) == 0){
+        return 1;
+    }
+    return 0;
+}
 void mcp_request_to_send(int buffer_number){
-    spi_set_ss(0);
+    //spi_set_ss(0);
     buffer_number = buffer_number % 3;
     char data = MCP_RTS_TX0;
     if(buffer_number == 0){

@@ -35,39 +35,41 @@ void can_init(void){
 }
 
 
-void can_send_message(message_t message){
-    mcp_write(MCP_TXB0SIDH, (message.id)>>3);
-    mcp_write(MCP_TXB0SIDL, (message.id)<<5);  //2 first are ID, we wish to know why this is this way!
-    mcp_write(MCP_TXB0DLC, message.length);     // length
-    for(int i = 0; i<message.length; i++){
-        mcp_write(MCP_TXB0D0 + i , message.data[i]); //data to be sent
+void can_send_message(message_t* message){
+    mcp_write(MCP_TXB0SIDH, (message->id)>>3);
+    mcp_write(MCP_TXB0SIDL, (message->id)<<5);  //2 first are ID, we wish to know why this is this way!
+    mcp_write(MCP_TXB0DLC, message->length);     // length
+    for(int i = 0; i<message->length; i++){
+        mcp_write(MCP_TXB0D0 + i , message->data[i]); //data to be sent
     }
     mcp_request_to_send(0);
 
 }
 
 
-message_t can_receive_message(){
-    message_t message;
+void can_receive_message(message_t* message){
+
 
     uint8_t id_low = mcp_read((MCP_RXB0SIDH)<<3);
     uint8_t id_high = mcp_read((MCP_RXB0SIDL)>>5);
 
-    message.length = mcp_read(MCP_RXB0DLC);
+    message->id = id_high + id_low;
 
-    int array[8];
-    for (int i = 0 ; i<message.length; i++){
-        array[i] = mcp_read(MCP_RXB0D0 + i );
+    message->length = mcp_read(MCP_RXB0DLC);
+
+ 
+    for (int i = 0 ; i<message->length; i++){
+        message->data[i] = mcp_read(MCP_RXB0D0 + i );
     }
-    *message.data = array;
-    return message;
+    
+   
 
 }
 
 
 ISR(INT0_vect){
     cli();
-    can_receive_message();
+    
     sei();
 }
 

@@ -12,3 +12,5 @@ int mcp_read_status(void);
 void mcp_request_to_send(int buffer_number);
 
 void mcp_bit_modify(int address, int mask, int data);
+
+int mcp_ready_to_send(void);
