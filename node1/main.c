@@ -71,14 +71,8 @@ void main(void){
 		menu_navigate();
 		can_send_message(&yolo);
 		_delay_ms(100);
-		//printf("CANSTAT: %d\n\r", mcp_read(0x0E));
-		message_t test;
 		
-		printf("yolo length: %d \n\r", yolo.length);
-		can_receive_message(&test);
-		printf("message_data %d\r\n", test.data[3]);
-		printf("message_length %d\r\n", test.length);
-		printf("id %d\n\r", test.id);
+		
 		
 
 		

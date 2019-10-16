@@ -25,17 +25,17 @@ void can_init(void){
     mcp_bit_modify(MCP_CANINTF, 0b00000100,0);
 
     //set interrupt on PD2 to falling edge
-    MCUCR |= (1<<ISC01);
+    //MCUCR |= (1<<ISC01);
 
     //enable interrupt on PD2
-    GICR |= (1<<INT0);
+    //GICR |= (1<<INT0);
 
     //clear interrupt flag on PD2
-    GIFR |= (1<<INTF0);
-
+    //GIFR |= (1<<INTF0);
+    
     //mcp_init();
 
-    can_set_mode(0x40);
+    can_set_mode(0x00);
 
     spi_set_ss(1);
 
@@ -71,7 +71,6 @@ void can_receive_message(message_t* message){
  
     for (int i = 0 ; i<message->length; i++){
         message->data[i] = mcp_read(MCP_RXB0D0 + i );
-        printf("%d\n\r", message->data[i]);
     }
     
    

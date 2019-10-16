@@ -35,7 +35,7 @@ void can_init(void){
 
     //mcp_init();
 
-    can_set_mode(0x40);
+    can_set_mode(0x00);
 
     spi_set_ss(1);
 
