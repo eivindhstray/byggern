@@ -14,6 +14,7 @@
 #include "mcp.h"
 #include "spi.h"
 #include "can.h"
+#include "joystick.h"
 
 
 #include <stdio.h>
@@ -45,32 +46,32 @@ void main(void){
 	
 	write_main_menu();
 
-	message_t yolo;
-	yolo.id = 0b11;
-	yolo.length = 4;
-	yolo.data[0] = 1;
-	yolo.data[1] = 3;
-	yolo.data[2] = 3;
-	yolo.data[3] = 7;
-	//DDRB |= (1 << PB0);
+	message_t position;
+	position.id = 0b01;
 
-	//spi_master_init();
-	//spi_slave_init();
-	/*while(mcp_read(0x0E) != 128){
-		mcp_reset();
-		printf("Trying to reset mcp2515\n\r");
-	}*/
+
+	position.length = 4;
+	
 	mcp_init();
 	can_init();
-	printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
 	while(1){
-		//printf("ready? %d", mcp_ready_to_send());
-		//PORTB ^= (1 << PB0);
+		
+		
 		oled_scroll();
+		printf("position %d \n\r", position.data[1]);
 		oled_select_indicator(OLED.line);	
 		menu_navigate();
-		can_send_message(&yolo);
-		_delay_ms(100);
+		joystick_update_details(&position);
+		
+		_delay_ms(20);
+		
+		printf("x-position %d \n\r", position.data[0]);
+		printf("y-position %d \n\r", position.data[1]);
+		printf("l-slider %d \n\r", position.data[2]);
+		printf("r-slider %d \n\r", position.data[3]);
+		can_send_message(&position);
+		_delay_ms(200);
+	
 		
 		
 		

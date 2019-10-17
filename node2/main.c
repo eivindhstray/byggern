@@ -24,27 +24,19 @@
 
 
 void main(void){
-	//PORTA = (0<<PORTA0)|(0<<PORTA1);
+	
 	DDRA = 0xFF;
 	DDRB = 0xFF;
 	DDRE = 0xFF;
 	USART_Init(MYUBRR);
-	//SRAM_initialize();
+	
 	DDRD = 0x00;
 	PORTD = 0xFF;
 	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
-	//SFIOR = (1 <<  XMM2);		
-	
+		
+	message_t test;
 
-	//DDRB |= (1 << PB0);
 
-	//spi_master_init();
-	//spi_slave_init();
-	/*while(mcp_read(0x0E) != 128){
-		mcp_reset();
-		printf("Trying to reset mcp2515\n\r");
-	}*/
-	
 	mcp_init();
 	can_init();
 	//printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
@@ -52,10 +44,13 @@ void main(void){
 		//printf("ready? %d", mcp_ready_to_send());
 		//PORTB ^= (1 << PB0);
 		
-		message_t test;
+		
 		
 		_delay_ms(200);
 		can_receive_message(&test);
+		printf("message_data %d\r\n", test.data[0]);
+		printf("message_data %d\r\n", test.data[1]);
+		printf("message_data %d\r\n", test.data[2]);
 		printf("message_data %d\r\n", test.data[3]);
 		printf("message_length %d\r\n", test.length);
 		printf("id %d\n\r", test.id);

@@ -61,17 +61,28 @@ void can_receive_message(message_t* message){
     uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
 */
     //With shifting bits
-    uint8_t id_high = mcp_read(MCP_RXB0SIDH)<<3;
-    uint8_t id_low = mcp_read(MCP_RXB0SIDL)>>5;
+    char can_intf = mcp_read(0x2C);
+    if(can_intf &(1<<0)){
+        uint8_t id_high = mcp_read(MCP_RXB0SIDH)<<3;
+        uint8_t id_low = mcp_read(MCP_RXB0SIDL)>>5;
 
-    message->id = id_high + id_low;
+        message->id = id_high + id_low;
 
-    message->length = mcp_read(MCP_RXB0DLC);
+        message->length = mcp_read(MCP_RXB0DLC);
 
- 
-    for (int i = 0 ; i<message->length; i++){
-        message->data[i] = mcp_read(MCP_RXB0D0 + i );
+    
+        for (int i = 0 ; i<message->length; i++){
+            message->data[i] = mcp_read(MCP_RXB0D0 + i );
+        }
+        can_intf &= ~(1<<0);
     }
+    if(can_intf & (1<<5))
+    {
+        printf("Can Error\n\r");
+        can_intf &= ~(1<<5);
+    }
+    mcp_write(0x2C, can_intf);
+    
     
    
 
