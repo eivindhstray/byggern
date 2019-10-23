@@ -12,7 +12,7 @@
 #include "mcp.h"
 #include "spi.h"
 #include "can.h"
-
+#include "pwm.h"
 
 #include <stdio.h>
 //#define FOSC 4915200UL// Clock Speed
@@ -25,25 +25,26 @@
 
 void main(void){
 	
-	DDRA = 0xFF;
+	/*DDRA = 0xFF;
 	DDRB = 0xFF;
 	DDRE = 0xFF;
 	USART_Init(MYUBRR);
 	
 	DDRD = 0x00;
-	PORTD = 0xFF;
 	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
-		
+	*/	
 	message_t test;
 
 
 	mcp_init();
 	can_init();
+	pwm_init();
+
+	pwm_update_duty_cycle(10);
 	//printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
 	while(1){
 		//printf("ready? %d", mcp_ready_to_send());
 		//PORTB ^= (1 << PB0);
-		
 		
 		
 		_delay_ms(200);
