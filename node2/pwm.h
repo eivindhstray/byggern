@@ -8,8 +8,8 @@ void pwm_set_output(void);
 
 void pwm_timer(void);
 
-int pwm_duty_cycle_ms(int joystick);
+double pwm_duty_cycle_ms(int joystick);
 
 void pwm_clear_interrupt(void);
 
-void pwm_run(int duty_cycle);
+void pwm_update_duty_cycle(int joystick);

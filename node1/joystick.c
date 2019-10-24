@@ -1,6 +1,7 @@
 #include "adc.h"
 #include <stdio.h>
 #include "can.h"
+#include "joystick.h"
 
 
 
@@ -33,7 +34,7 @@ void joystick_update_details(message_t *message){
 //y = 255: top
 
 
-Joystick_dir get_direction_x(void){
+/*Joystick_dir get_direction_x(void){
     
     if x_pos()< 255/2{
         return LEFT;
@@ -49,4 +50,4 @@ Joystick_dir get_direction_y(void){
     }
     return UP;
 
-}
+}*/
