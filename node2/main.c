@@ -14,6 +14,7 @@
 #include "spi.h"
 #include "can.h"
 #include "pwm.h"
+#include "goal_sensor.h"
 
 #include <stdio.h>
 //#define FOSC 4915200UL// Clock Speed
@@ -37,23 +38,21 @@ void main(void){
 		
 	message_t test;
 	cli();
-	printf("yolo%d",1);
-
-
-
 	mcp_init();
 	can_init();
 	pwm_init();
+	goal_sensor_init();
 
 	pwm_update_duty_cycle(1.7);
-	printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
+	//printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
 	sei();
 	while(1){
 		
 		
 		
 		can_receive_message(&test);
-		
+		_delay_ms(200);
+		printf("goal%d\r\n",goal_sensor_read());
 		printf("message_data %d\r\n", test.data[0]);
 		printf("message_data %d\r\n", test.data[1]);
 		printf("message_data %d\r\n", test.data[2]);
@@ -63,7 +62,8 @@ void main(void){
 		
 		uint8_t joy = test.data[0];
 
-		pwm_update_duty_cycle(joy);	
+		pwm_update_duty_cycle(joy);
+			
 
 		
 	}

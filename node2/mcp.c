@@ -10,12 +10,12 @@
 
 void mcp_init(void){
     spi_master_init();
-    printf("Hello spi");
+    
     mcp_reset();
-    printf("Hello mcp");
+    
 
     uint8_t val = mcp_read(MCP_CANSTAT);
-    printf("Val CANSTAT: %d\n\r", val);
+    
 
     
 }

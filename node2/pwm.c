@@ -33,9 +33,9 @@ void pwm_set_timer(void){
 
 
 double pwm_duty_cycle_ms(int joystick){
-    printf("joystick position %d",joystick);
-    double max = 128;
-    double output =  (abs(joystick-max)/max)*1.2 + 0.9;
+    
+    double max = 255;
+    double output =  ((joystick/max))*1.2 + 0.9;
     return output;
 }
 
