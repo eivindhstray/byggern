@@ -15,6 +15,7 @@
 #include "can.h"
 #include "pwm.h"
 #include "goal_sensor.h"
+#include "twi.h"
 
 #include <stdio.h>
 //#define FOSC 4915200UL// Clock Speed
