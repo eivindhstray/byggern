@@ -15,15 +15,12 @@ void goal_sensor_init(void){
     ADMUX &= ~(1<<MUX4);
     ADCSRB &= ~(1<<MUX5);
     ADCSRA |=(1<<ADEN)|(1<<ADPS0)|(1<<ADPS1)|(1<<ADPS2);
-    //ADCSRA |=(1<<ADIE);
 
 }
 
 int goal_sensor_read(void){
     ADCSRA |= (1<<ADSC);
-    while(!ADCSRA &(1<<ADIF)){
-        printf("waiting");
-    }
+    while(!ADCSRA &(1<<ADIF)); //wait for conversion to be ready
     
     int adc_low = ADCL;
     int adc_high = ADCH;

@@ -16,6 +16,7 @@
 #include "pwm.h"
 #include "goal_sensor.h"
 #include "twi.h"
+#include "motor.h"
 
 #include <stdio.h>
 //#define FOSC 4915200UL// Clock Speed
@@ -43,7 +44,8 @@ void main(void){
 	can_init();
 	pwm_init();
 	goal_sensor_init();
-
+	motor_init();
+	motor_enable();
 	pwm_update_duty_cycle(1.7);
 	//printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
 	sei();
@@ -52,20 +54,12 @@ void main(void){
 		
 		
 		can_receive_message(&test);
-		_delay_ms(200);
-		printf("goal%d\r\n",goal_sensor_read());
-		printf("message_data %d\r\n", test.data[0]);
-		printf("message_data %d\r\n", test.data[1]);
-		printf("message_data %d\r\n", test.data[2]);
-		printf("message_data %d\r\n", test.data[3]);
-		printf("message_length %d\r\n", test.length);
-		printf("id %d\n\r", test.id);
 		
-		uint8_t joy = test.data[0];
-
-		pwm_update_duty_cycle(joy);
-			
-
+		uint8_t wagon = test.data[1];
+		uint8_t servo = test.data[2];
+		motor_set_speed(wagon);
+		pwm_update_duty_cycle(servo);
+		
 		
 	}
 	
@@ -77,8 +71,15 @@ void main(void){
 
 
 
+/*
+printf("goal%d\r\n",goal_sensor_read());
+		printf("message_data %d\r\n", test.data[0]);
+		printf("message_data %d\r\n", test.data[1]);
+		printf("message_data %d\r\n", test.data[2]);
+		printf("message_data %d\r\n", test.data[3]);
+		printf("message_length %d\r\n", test.length);
+		printf("id %d\n\r", test.id);
 
-
-
+*/
 
 //sudo picocom -b 9600 -r -l /dev/ttyS0

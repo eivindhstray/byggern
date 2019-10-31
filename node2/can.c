@@ -4,6 +4,7 @@
 #include "can.h"
 #include "MCP2515.h"
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 
 
@@ -61,7 +62,7 @@ void can_receive_message(message_t* message){
     uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
 */
     //With shifting bits
-    char can_intf = mcp_read(0x2C);
+    char can_intf = mcp_read(MCP_CANINTF);
     if(can_intf &(1<<0)){
         uint8_t id_high = mcp_read(MCP_RXB0SIDH)<<3;
         uint8_t id_low = mcp_read(MCP_RXB0SIDL)>>5;
@@ -75,12 +76,15 @@ void can_receive_message(message_t* message){
             message->data[i] = mcp_read(MCP_RXB0D0 + i );
         }
         can_intf &= ~(1<<0);
+        can_intf &= ~(1<<5);
     }
     if(can_intf & (1<<5))
     {
         printf("Can Error\n\r");
         can_intf &= ~(1<<5);
     }
+
+    
     mcp_write(0x2C, can_intf);
     
     

@@ -39,6 +39,7 @@ double pwm_duty_cycle_ms(int joystick){
     return output;
 }
 
+
 void pwm_clear_interrupt(void){
     while (TIFR0 &= (1<<OCF0A)){
         TIFR0 &= ~(1<<OCF0A);
