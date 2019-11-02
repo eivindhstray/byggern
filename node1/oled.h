@@ -1,13 +1,6 @@
 typedef enum SCREEN{MAIN,PLAY,SETTINGS,MUSIC}screen_t;
 
 
-struct OLED{
-    int line;
-    screen_t screen;
-    
-
-}OLED;
-
 void oled_write_c(char command);
 
 void oled_write_char(char letter);
@@ -25,3 +18,5 @@ int oled_scroll(void);
 void oled_select_indicator(int row);
 
 void oled_remove_marker(void);
+
+int oled_select(void);

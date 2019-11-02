@@ -50,6 +50,8 @@ void oled_init(void){
     oled_write_c(0xa6);        //set  n0xb0display        
     oled_write_c(0xaf);        //  disp0xb0
     //oled_write_c(0xa5);        //make0xb0 white
+    oled_write_c(0x20);
+    oled_write_c(0b10);
 }
 
 
@@ -76,11 +78,10 @@ void oled_select_line(int row){
     oled_write_c(0x22);
     oled_write_c(0x00);
     oled_write_c(0x07);
-    oled_write_c(0xb0 + row-1);
+    oled_write_c(0xb0 + row-1);  //IS THIS WIERD?
     oled_write_c(0x21);        //select col and the size of col
     oled_write_c(0); 
-    oled_write_c(0x7f);         //col 127
-    OLED.line = row;
+    oled_write_c(0x7f);         //col 12;
 }
 
 void oled_remove_marker(void){
@@ -97,7 +98,6 @@ void oled_remove_marker(void){
             oled_write_data(0x00);
         }
     }
-    oled_select_line(OLED.line);
 }
 
 
@@ -106,32 +106,32 @@ void oled_select_indicator(int row){
     oled_write_c(0x22);
     oled_write_c(0x00);
     oled_write_c(0x07);
-    oled_write_c(0xb0 + row-1);
+    oled_write_c(0xb0 + row-1); //IS THIS WIERD?!
     oled_write_c(0x21);        //select col and the size of col
     oled_write_c(0x70); 
     oled_write_c(0x7f);         //col 127
     print_string("<-");
-    OLED.line = row;
-    oled_select_line(OLED.line);
+    oled_select_line(row);
 }
 
 
 int oled_scroll(void){
     
-    if (y_pos() == 0 && OLED.line<8){
-        OLED.line += 1;
-        
-        oled_select_line(OLED.line);
-        _delay_ms(1000);
+    if (y_pos() == 0){
         return 1;    
     }
-    if (y_pos() >= 230 && OLED.line>3){ //such that it does not seem that one can "select" the upper information line and the blank space.
-        OLED.line -= 1;
-        
-        
-        oled_select_line(OLED.line);
-        _delay_ms(1000);
+    if (y_pos() >= 230){ //such that it does not seem that one can "select" the upper information line and the blank space.
+        return -1;
+    }
+    return 0;
+}
+
+int oled_select(void){
+    if(x_pos() >= 240){
         return 1;
+    }
+    if(x_pos()< 15){
+        return -1;
     }
     return 0;
 }

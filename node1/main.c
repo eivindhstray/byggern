@@ -40,15 +40,11 @@ void main(void){
 	
 
 	oled_init();
-
-	oled_reset();
-
-	
-	write_main_menu();
-
 	message_t position;
 	position.id = 0b01;
 
+	menu_ptr menu = menu_build();
+	menu_init(menu);
 
 	position.length = 4;
 	
@@ -57,10 +53,9 @@ void main(void){
 	while(1){
 		
 		
-		oled_scroll();
 		printf("position %d \n\r", position.data[1]);
-		oled_select_indicator(OLED.line);	
-		menu_navigate();
+			
+		
 		joystick_update_details(&position);
 		
 		_delay_ms(20);
