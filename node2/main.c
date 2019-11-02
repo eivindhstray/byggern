@@ -17,6 +17,7 @@
 #include "goal_sensor.h"
 #include "twi.h"
 #include "motor.h"
+#include "pi.h"
 
 #include <stdio.h>
 //#define FOSC 4915200UL// Clock Speed
@@ -54,9 +55,8 @@ void main(void){
 		
 		
 		can_receive_message(&test);
-		
-		uint8_t wagon = test.data[1];
-		uint8_t servo = test.data[2];
+		uint8_t wagon = test.data[0];
+		uint8_t servo = test.data[1];
 		motor_set_speed(wagon);
 		pwm_update_duty_cycle(servo);
 		

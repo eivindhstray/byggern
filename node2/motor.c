@@ -50,9 +50,6 @@ void motor_set_speed(int joystick){
     
 }
 
-int motor_pi_regulator(int position, int speed){
-
-}
 
 
 
