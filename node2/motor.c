@@ -8,9 +8,12 @@
 void motor_init(void){
     DDRD |= (1<<PD0)|(1<<PD1);
     TWI_Master_Initialise();
-    DDRK = 0x00;
+    
     DDRH = 0xFF; //set direction and enable. 
     motor_reset_toggle();
+
+    DDRK = 0x00;
+
     
 }
 
@@ -68,15 +71,16 @@ void motor_reset_toggle(void){
 int motor_read_encoder(void){
     PORTH &= ~(1<<PH5); //set !OE low
     PORTH &= ~(1<<PH3); //set SEL low
-    _delay_us(20);
-    uint8_t high = PINK<<8;
+    _delay_us(120);
+    uint8_t high = PINK;
     PORTH |= (1<<PH3); //set sel high
-    _delay_us(20);
+    _delay_us(120);
     uint8_t low = PINK; 
-
 
     PORTH|= (1<<PH5); //set !OE high
 
-    return high|low;
+    return (high<<8)|low;
     
 }
+
+

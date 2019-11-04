@@ -18,6 +18,7 @@
 #include "twi.h"
 #include "motor.h"
 #include "pi.h"
+#include "solenoid.h"
 
 
 #include <stdio.h>
@@ -29,29 +30,26 @@
 
 
 void main(void){
-	
-	/*DDRA = 0xFF;
-	DDRB = 0xFF;
-	DDRE = 0xFF;
-	*/
+
 	USART_Init(MYUBRR);
 	
 	DDRD = 0x00;
-	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
+	MCUCR |= (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
 		
 	message_t test;
-	cli();
+	sei();
 	mcp_init();
 	can_init();
 	pwm_init();
 	goal_sensor_init();
 	motor_init();
 	motor_enable();
-	sei();
-	//pi_init();
+	solenoid_init();
 	
-
-	double integral;
+	solenoid_shoot();
+	
+	pi_init();
+	
 	while(1){
 		
 		
@@ -60,10 +58,15 @@ void main(void){
 		uint8_t wagon = test.data[0];
 		uint8_t servo = test.data[1];
 		pi_update_ref(wagon);
-		//motor_set_speed(wagon);
 		motor_set_speed(wagon);
+		//motor_set_speed(wagon);
 		pwm_update_duty_cycle(servo);
-		printf("yolo%d\r\n",motor_read_encoder());
+		int val = motor_read_encoder();
+		//pi_update_ref(val);
+		printf("still looping%d\n\r",val);
+		
+
+		
 		
 	}
 	
@@ -74,4 +77,4 @@ void main(void){
 }
 
 
-//sudo picocom -b 9600 -r -l /dev/ttyS0
+
