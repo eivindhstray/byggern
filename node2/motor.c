@@ -2,12 +2,16 @@
 #include "twi.h"
 #include <avr/io.h>
 #include <util/delay.h>
+#include "pi.h"
 
 
 void motor_init(void){
     DDRD |= (1<<PD0)|(1<<PD1);
     TWI_Master_Initialise();
-    DDRH |= (1<<PH1)|(1<<PH4); //set direction and enable. 
+    DDRK = 0x00;
+    DDRH = 0xFF; //set direction and enable. 
+    motor_reset_toggle();
+    
 }
 
 void motor_enable(void){
@@ -55,26 +59,24 @@ void motor_set_speed(int joystick){
 
 void motor_reset_toggle(void){
     PORTH &=~(1<<PH6); //Toggle RST
-    _delay_ms(1000);
+    
     PORTH |= (1<<PH6);
-    _delay_ms(1000);
+    
 }
 
 
 int motor_read_encoder(void){
     PORTH &= ~(1<<PH5); //set !OE low
     PORTH &= ~(1<<PH3); //set SEL low
-    _delay_ms(20);
-    int high = PINK;
+    _delay_us(20);
+    uint8_t high = PINK<<8;
     PORTH |= (1<<PH3); //set sel high
-    _delay_ms(20);
-    int low = PINK; 
+    _delay_us(20);
+    uint8_t low = PINK; 
 
-    motor_reset_toggle();
 
     PORTH|= (1<<PH5); //set !OE high
 
-    return high<<8|low;
-    
+    return high|low;
     
 }

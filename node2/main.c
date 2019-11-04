@@ -19,13 +19,13 @@
 #include "motor.h"
 #include "pi.h"
 
+
 #include <stdio.h>
 //#define FOSC 4915200UL// Clock Speed
 #define BAUD 9600
 #define FOSC 16000000UL
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 103
-
 
 
 void main(void){
@@ -47,19 +47,23 @@ void main(void){
 	goal_sensor_init();
 	motor_init();
 	motor_enable();
-	pwm_update_duty_cycle(1.7);
-	//printf("CANSTAT after reset: %d\n\r", mcp_read(0x0E));
 	sei();
+	//pi_init();
+	
+
+	double integral;
 	while(1){
 		
 		
-		
 		can_receive_message(&test);
+		
 		uint8_t wagon = test.data[0];
 		uint8_t servo = test.data[1];
+		pi_update_ref(wagon);
+		//motor_set_speed(wagon);
 		motor_set_speed(wagon);
 		pwm_update_duty_cycle(servo);
-		
+		printf("yolo%d\r\n",motor_read_encoder());
 		
 	}
 	
@@ -69,17 +73,5 @@ void main(void){
 	
 }
 
-
-
-/*
-printf("goal%d\r\n",goal_sensor_read());
-		printf("message_data %d\r\n", test.data[0]);
-		printf("message_data %d\r\n", test.data[1]);
-		printf("message_data %d\r\n", test.data[2]);
-		printf("message_data %d\r\n", test.data[3]);
-		printf("message_length %d\r\n", test.length);
-		printf("id %d\n\r", test.id);
-
-*/
 
 //sudo picocom -b 9600 -r -l /dev/ttyS0
