@@ -8,6 +8,8 @@
 
 // our pages goes from 1-8 instead of 0-7 ??
 
+//todo: Pause by pressing left button!
+
 menu_ptr main_menu_build(void){
     menu_ptr main = malloc(sizeof(menu_t));
     main -> parent = NULL;

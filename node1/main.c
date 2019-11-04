@@ -44,7 +44,7 @@ void main(void){
 	position.id = 0b01;
 
 	menu_ptr menu = menu_build();
-	menu_init(menu);
+	//menu_init(menu);
 
 	position.length = 4;
 	
@@ -52,18 +52,13 @@ void main(void){
 	can_init();
 	while(1){
 		
-		
-		printf("position %d \n\r", position.data[1]);
 			
 		
 		joystick_update_details(&position);
 		
 		_delay_ms(20);
 		
-		printf("x-position %d \n\r", position.data[0]);
-		printf("y-position %d \n\r", position.data[1]);
-		printf("l-slider %d \n\r", position.data[2]);
-		printf("r-slider %d \n\r", position.data[3]);
+
 		can_send_message(&position);
 		_delay_ms(200);
 	

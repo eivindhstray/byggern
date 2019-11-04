@@ -71,7 +71,6 @@ void can_receive_message(message_t* message){
  
     for (int i = 0 ; i<message->length; i++){
         message->data[i] = mcp_read(MCP_RXB0D0 + i );
-        printf("%d\n\r", message->data[i]);
     }
     
    

@@ -13,8 +13,6 @@ void mcp_init(void){
     mcp_reset();
 
     uint8_t val = mcp_read(MCP_CANSTAT);
-    printf("Val CANSTAT: %d\n\r", val);
-
     
 }
 
@@ -42,7 +40,7 @@ void mcp_reset(void){
     spi_set_ss(0);
     spi_master_transmit(MCP_RESET);
     spi_set_ss(1);
-    _delay_ms(200);
+    _delay_ms(10);
     
 }
 

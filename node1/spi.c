@@ -5,18 +5,7 @@
 #include "io.h"
 #include <stdio.h>
 
-/*
-void set_CS(int value){
-    switch(value){
-        case 0:
-            PORTB = (0<<PB4);
-            break;
-        case 1:
-            PORTB = (1<<PB4);
-            break;
-    }
 
-}*/
 
 void spi_master_init(void){
     
@@ -27,7 +16,7 @@ void spi_master_init(void){
 }
 
 void spi_master_transmit(char cData){
-    //spi_set_ss(0);
+    
     SPDR = cData; //start transmission
     while(!(SPSR & (1<<SPIF)))//wait for transmission complete
     ;
@@ -37,11 +26,11 @@ void spi_master_transmit(char cData){
 
 
 int spi_read(){
-    //spi_set_ss(0);
+    
     SPDR = 0xFF;
     while(!(SPSR & (1<<SPIF))) //Wait for reception complete
     ;
-   // spi_set_ss(1);
+   
     return SPDR; //return data register
 ;
 }
