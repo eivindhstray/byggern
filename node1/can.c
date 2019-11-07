@@ -42,7 +42,7 @@ void can_init(void){
 
     spi_set_ss(1);
 
-    sei();
+    sei(); //could probably be removed
 
 
     //set up interrupt for sending message

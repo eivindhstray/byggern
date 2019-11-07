@@ -27,17 +27,11 @@
 #define FOSC 16000000UL
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 103
-
+message_t message;
 
 void main(void){
-
+	cli();
 	USART_Init(MYUBRR);
-	
-	DDRD = 0x00;
-	MCUCR |= (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
-		
-	message_t test;
-	sei();
 	mcp_init();
 	can_init();
 	pwm_init();
@@ -48,32 +42,35 @@ void main(void){
 	
 	solenoid_shoot();
 	
+	sei();
 	pi_init();
 	
+	
 	while(1){
-		
-		
-		can_receive_message(&test);
-		
-		uint8_t wagon = test.data[0];
-		uint8_t servo = test.data[1];
-		pi_update_ref(wagon);
-		motor_set_speed(wagon);
-		//motor_set_speed(wagon);
-		pwm_update_duty_cycle(servo);
-		int val = motor_read_encoder();
-		//pi_update_ref(val);
-		printf("still looping%d\n\r",val);
-		
-
-		
-		
+		pi_regulator();	
+		_delay_ms(10);
+		if(message.data[4]){
+			solenoid_shoot();
+			_delay_ms(200);
+		}
 	}
-	
+}
 
-	//ttyACM0
-	//dmesg | grep -i tty
+
+ISR(INT2_vect){
+	cli();
+	printf("hei");
+	can_receive_message(&message);
+	uint8_t wagon = message.data[0];
+	uint8_t servo = message.data[1];
+	pi_update_ref(wagon);
+	pwm_update_duty_cycle(servo);
 	
+	sei();
+}
+
+ISR(BADISR_vect){
+	printf("badisr");
 }
 
 

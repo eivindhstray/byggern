@@ -16,23 +16,15 @@ void can_set_mode(int mode){
 void can_init(void){
     spi_set_ss(0);
     // received message interrupt
-    mcp_bit_modify(MCP_CANINTE, 0b00000001,1);
-
-    mcp_bit_modify(MCP_CANINTE, 0b00000100,1);
+    mcp_bit_modify(MCP_CANINTE, 0b00000011,0b11);
 
     //clear interrupt flag
-    mcp_bit_modify(MCP_CANINTF, 0b00000001,0);
+    mcp_bit_modify(MCP_CANINTF, 0b00000011,0);
 
-    mcp_bit_modify(MCP_CANINTF, 0b00000100,0);
-
-    //set interrupt on PD2 to falling edge
-    //MCUCR |= (1<<ISC01);
-
-    //enable interrupt on PD2
-    //GICR |= (1<<INT0);
-
+    EICRB |= (1<<ISC01);
+	EIMSK |= (1<<INT2);
     //clear interrupt flag on PD2
-    //GIFR |= (1<<INTF0);
+    EIFR |= (1<<INTF2);
     
     //mcp_init();
 
@@ -76,12 +68,8 @@ void can_receive_message(message_t* message){
             message->data[i] = mcp_read(MCP_RXB0D0 + i );
         }
         can_intf &= ~(1<<0);
-        can_intf &= ~(1<<5);
-    }
-    if(can_intf & (1<<5))
-    {
-        printf("Can Error\n\r");
-        can_intf &= ~(1<<5);
+        can_intf &= ~(1<<1);
+
     }
 
     
