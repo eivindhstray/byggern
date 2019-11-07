@@ -4,6 +4,7 @@
 #include "can.h"
 #include "MCP2515.h"
 #include <avr/interrupt.h>
+#include "uart.h"
 
 
 
@@ -18,6 +19,8 @@ void can_init(void){
     mcp_bit_modify(MCP_CANINTE, 0b00000001,1);
 
     mcp_bit_modify(MCP_CANINTE, 0b00000100,1);
+
+    
 
     //clear interrupt flag
     mcp_bit_modify(MCP_CANINTF, 0b00000001,0);
@@ -39,6 +42,13 @@ void can_init(void){
 
     spi_set_ss(1);
 
+    sei();
+
+
+    //set up interrupt for sending message
+
+
+
 }
 
 
@@ -53,28 +63,55 @@ void can_send_message(message_t* message){
 
 }
 
+int can_should_send(message_t message, uint8_t position_before[8]){
+    if ((abs(message.data[0] - position_before[0]) >3)|| (abs(message.data[1] - position_before[1])>3) || message.data[4] == 1){
+			can_send_message(&message);
+			printf("sending");
+		}
+	
+		
+		for(int i = 0; i<8; i++){
+			position_before[i] = message.data[i];
+		}
+		
+}
 
-void can_receive_message(message_t* message){
+
+message_t can_receive_message(){
 
 /* With * and /
     uint8_t id_high = mcp_read(MCP_RXB0SIDH)*0b1000;
     uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
 */
     //With shifting bits
+    message_t message;
+
     uint8_t id_high = mcp_read(MCP_RXB0SIDH)<<3;
     uint8_t id_low = mcp_read(MCP_RXB0SIDL)>>5;
 
-    message->id = id_high + id_low;
+    message.id = id_high + id_low;
 
-    message->length = mcp_read(MCP_RXB0DLC);
+    message.length = mcp_read(MCP_RXB0DLC);
 
  
-    for (int i = 0 ; i<message->length; i++){
-        message->data[i] = mcp_read(MCP_RXB0D0 + i );
+    for (int i = 0 ; i<message.length; i++){
+        message.data[i] = mcp_read(MCP_RXB0D0 + i );
     }
-    
-   
 
+    return message; 
+}
+
+
+
+ISR(INT0_vect){
+    cli();
+    message_t message = can_receive_message();
+    if(message.length>8){
+        printf("too long message. Msg length:%d\n\r",message.length);
+    }
+    mcp_bit_modify(MCP_CANINTF,0b1,0);
+    printf("interuptyo!!");
+    sei();
 }
 
 

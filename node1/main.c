@@ -15,6 +15,7 @@
 #include "spi.h"
 #include "can.h"
 #include "joystick.h"
+#include <avr/interrupt.h>
 
 
 #include <stdio.h>
@@ -23,64 +24,42 @@
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 31
 #include "menu.h"
-
-
-void main(void){
+void main_init(){
 	//PORTA = (0<<PORTA0)|(0<<PORTA1);
-	DDRA = 0xFF;
-	DDRB = 0xFF;
+	DDRA = 0xFF; //define PORTA as output
+	DDRB = 0xFF; //define PORTB as output
+	r_button_init();
 	DDRE = 0xFF;
 	USART_Init(MYUBRR);
-	//SRAM_initialize();
 	DDRD = 0x00;
 	PORTD = 0xFF;
 	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
-	SFIOR = (1 <<  XMM2);		
-	
-	
-
+	SFIOR = (1 <<  XMM2);	
 	oled_init();
+	mcp_init();
+	can_init();
+}
+
+void main(void){
+	cli();
+	main_init();
 	message_t position;
 	position.id = 0b01;
-
 	menu_ptr menu = menu_build();
 	//menu_init(menu);
 
-	position.length = 4;
+	position.length = 5;
 	
-	mcp_init();
-	can_init();
+	uint8_t position_before[8];
+
+	
 	while(1){
-		
-			
-		
 		joystick_update_details(&position);
 		
-		_delay_ms(20);
-		
-
-		can_send_message(&position);
-		_delay_ms(200);
-	
-		
-		
-		
-
-		
+		can_should_send(position, &position_before); //only send if there is actually a change of information to
+		//be sent to node2	
 	}
 	
-	
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -89,50 +68,4 @@ void main(void){
 
 
 
-//sudo picocom -b 9600 -r -l /dev/ttyS0
-
-
 	
-	/*while(1){
-		USART_Transmit('a'); //day 2
-		unsigned char test = USART_Receive();
-		if(UDR0 != 0){
-			printf("hei");			
-		}
-
-		
-		
-		PORTE = (0<<PORTE1);
-		PORTA = 0xFF;
-		_delay_ms(100);
-		PORTE = (1<<PORTE1);
-		_delay_ms(1500);
-		PORTE &= ~(1<<PORTE1);
-		PORTA &= ~(1<<PORTA0);
-		_delay_ms(1000);
-		PORTA = (1<<PORTA0);
-
-		_delay_ms(5000);
-
-		PORTE = (0<<PORTE1);
-		PORTA = 0x00;
-		_delay_ms(100);
-		PORTE = (1<<PORTE1);
-		_delay_ms(1500);
-		PORTE &= ~(1<<PORTE1);
-		PORTA &= ~(1<<PORTA0);
-		_delay_ms(1000);
-		PORTA = (1<<PORTA0);
-		
-		
-		if(USART_Receive() == 'a'){ //day 2
-			PORTB = (1<<PB0);
-			_delay_ms(1500);
-			PORTB = (0<<PB0);
-			_delay_ms(1500);
-			printf("a");
-			USART_Transmit("a");
-			
-		}
-		
-	}*/

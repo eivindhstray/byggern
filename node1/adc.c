@@ -7,8 +7,11 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <avr/io.h>
 
-
+void r_button_init(void){
+    DDRB&=~(1<<PB0);
+}
 
 
 int x_pos(void){
@@ -42,4 +45,9 @@ int r_slider(void){
 	_delay_ms(60);
 	uint8_t out = ext_ram[0];
 	return out;
+}
+
+int r_button(void){
+    
+    return PINB&(1<<PB0);
 }

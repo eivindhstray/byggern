@@ -13,6 +13,7 @@ void joystick_update_details(message_t *message){
     message->data[1] = y_pos();
     message->data[2] = l_slider();
     message->data[3] = r_slider();
+    message->data[4] = r_button();
 }
 
 // x = 255: right 
