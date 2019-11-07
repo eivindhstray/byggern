@@ -1,5 +1,5 @@
 
-
+//void pi_set_regulator values(int difficulty);
 
 void pi_regulator();
 

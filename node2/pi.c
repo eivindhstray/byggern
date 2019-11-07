@@ -23,10 +23,25 @@ static double motor_max;
 volatile double d_pos;
 volatile double pos_before;
 
+/* Implementing difficulty using K_d and K_p is more tricky that i thought. Higher values of K_p sets
+motor speed directly left. Maybe that could be a nice difficulty setting? */
+/*
+void pi_set_regulator values(int difficulty){
+    if (difficulty == 1){       //Normal diff
+        K_p = 1;
+        K_d = 1;
+    }
+    if (difficulty == 2){       //Hard diff
+        K_p = 10;
+        K_d = 10;
+    }
+    else {
+        K_p = 1;
+        K_d = 1;
+    }
 
-
-
-
+}
+*/
 
 void pi_regulator(void){
     double pos = motor_read_encoder();

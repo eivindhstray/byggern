@@ -29,6 +29,9 @@ void write_settings_menu(void);
 
 void write_music_menu(void);
 
+//Additional after Stray left the lab
+void write_open_message(void);
+
 
 
 

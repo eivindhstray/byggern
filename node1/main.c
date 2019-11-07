@@ -33,7 +33,7 @@ void main_init(){
 	USART_Init(MYUBRR);
 	DDRD = 0x00;
 	PORTD = 0xFF;
-	MCUCR = (1 << SRE); 		//når denne brukes kan man ikke sette registre selv
+	MCUCR = (1 << SRE); 		//Enable external memory. SRAM init.
 	SFIOR = (1 <<  XMM2);	
 	oled_init();
 	mcp_init();
@@ -45,8 +45,10 @@ void main(void){
 	main_init();
 	message_t position;
 	position.id = 0b01;
+	write_open_message();
+	_delay_ms(5000);
 	menu_ptr menu = menu_build();
-	//menu_init(menu);
+	menu_init(menu);
 
 	position.length = 5;
 	
