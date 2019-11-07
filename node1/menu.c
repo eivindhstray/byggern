@@ -4,6 +4,8 @@
 #include "adc.h"
 #include <util/delay.h>
 #include "menu.h"
+#include "can.h"
+#include "joystick.h"
 #include <stdlib.h>
 
 // our pages goes from 1-8 instead of 0-7 ??
@@ -14,7 +16,7 @@ menu_ptr main_menu_build(void){
     menu_ptr main = malloc(sizeof(menu_t));
     main -> parent = NULL;
     main ->function = write_main_menu;
-    for(int i = 0; i<4; i++){
+    for(int i = 0; i<8; i++){
         main -> child[i] = NULL;
     }
     return main;
@@ -29,6 +31,7 @@ menu_ptr menu_build(){
     menu_ptr settings_fontsize = menu_add(menu_settings,NULL);
     menu_ptr music_off = menu_add(menu_music, NULL);
     menu_ptr mucis_on = menu_add(menu_music, NULL);
+    //menu_ptr play = menu_add(menu_main, &play_game);
 
     return menu_main;
 }
@@ -131,3 +134,20 @@ void write_open_message(void){
     oled_select_line(6);
     print_string("ARCADE GAME!");
 }
+/*
+void play_game(void){
+    oled_write_c(0xae);  //supposed to turn OLED off.
+    
+    message_t position;
+    position.id = 0b01;
+    position.length = 5;
+
+    uint8_t position_before[8];
+    joystick_update_details(&position);
+    can_should_send(position , &position_before);
+
+    for (i = 0; i < 6; i++){
+        position_before[i] = position.data[i];
+    }
+
+}*/

@@ -78,7 +78,7 @@ void oled_select_line(int row){
     oled_write_c(0x22);
     oled_write_c(0x00);
     oled_write_c(0x07);
-    oled_write_c(0xb0 + row-1);  //IS THIS WIERD?
+    oled_write_c(0xb0 + row-1);  
     oled_write_c(0x21);        //select col and the size of col
     oled_write_c(0); 
     oled_write_c(0x7f);         //col 12;
@@ -106,7 +106,7 @@ void oled_select_indicator(int row){
     oled_write_c(0x22);
     oled_write_c(0x00);
     oled_write_c(0x07);
-    oled_write_c(0xb0 + row-1); //IS THIS WIERD?!
+    oled_write_c(0xb0 + row-1);
     oled_write_c(0x21);        //select col and the size of col
     oled_write_c(0x70); 
     oled_write_c(0x7f);         //col 127

@@ -45,21 +45,25 @@ void main(void){
 	main_init();
 	message_t position;
 	position.id = 0b01;
-	write_open_message();
-	_delay_ms(5000);
+	//write_open_message();
+	//_delay_ms(5000);
 	menu_ptr menu = menu_build();
-	menu_init(menu);
+	//menu_init(menu);
 
 	position.length = 5;
 	
 	uint8_t position_before[8];
-
 	
+	
+	//Play function defined s.t. CAN bus only on when play_game. 
 	while(1){
+		
+		
 		joystick_update_details(&position);
 		
 		can_should_send(position, &position_before); //only send if there is actually a change of information to
 		//be sent to node2	
+		
 	}
 	
 }
