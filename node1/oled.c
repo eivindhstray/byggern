@@ -76,7 +76,7 @@ void oled_reset(void){
         }
         oled_write_c(0xb0 + i);     //newline
     } 
-    oled_write_c(0xb0);             //to whereever we want to write
+    oled_write_c(0xb0);             //to whereever we want to write. 1st row.
 }
 
 void oled_select_line(int row){ 
@@ -99,7 +99,7 @@ void oled_remove_marker(void){
         oled_write_c(0x70); 
         oled_write_c(0x7f);
         oled_write_c(0xb0 + j);
-        for (int i = 112; i<127; i++){
+        for (int i = 0x70; i<0x7F; i++){
             oled_write_data(0x00);
         }
     }

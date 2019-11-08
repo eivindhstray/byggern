@@ -23,7 +23,6 @@ void oled_remove_marker(void);
 
 int oled_select(void);
 
-
 void  oled_bright_high(void);
 
 void oled_bright_medium(void);

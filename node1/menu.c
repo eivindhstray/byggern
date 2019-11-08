@@ -183,6 +183,7 @@ void menu_brightness_high(){
     print_string("high brightness");
     oled_select_line(3);
     print_string("left to return");
+   
 }
 
 void menu_brightness_low(){
@@ -192,4 +193,5 @@ void menu_brightness_low(){
     print_string("low brightness");
     oled_select_line(3);
     print_string("left to return");
+    
 }
