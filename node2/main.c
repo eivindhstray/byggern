@@ -47,6 +47,7 @@ void main(void){
 	printf("lessgo!");
 	
 	
+	
 	while(1){
 		pi_regulator();	
 		_delay_ms(10);

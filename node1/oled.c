@@ -35,9 +35,7 @@ void oled_init(void){
     oled_write_c(0xa8);        //multiplex  ration  mode:63        
     oled_write_c(0x3f);        
     oled_write_c(0xd5);        //display  divide ratio/osc. freq. mode       
-    oled_write_c(0x80);                
-    oled_write_c(0x81);        //contrast  control          
-    oled_write_c(0x50);                
+    oled_write_c(0x80);                               
     oled_write_c(0xd9);        //set  pre-charge  period        
     oled_write_c(0x21);                
     oled_write_c(0x20);        //Set  Memory  Addressing  Mode        
@@ -52,6 +50,13 @@ void oled_init(void){
     //oled_write_c(0xa5);        //make0xb0 white
     oled_write_c(0x20);
     oled_write_c(0b10);
+   
+}
+
+
+void oled_change_brightness(int brightness){ //0x00-0xFF         
+    oled_write_c(0x81);
+    oled_write_c(brightness);
 }
 
 
@@ -147,4 +152,18 @@ void print_string(char* content){
     for (int i = 0; i< size; i++){
         oled_write_char(content[i]);
     }
+}
+
+
+void  oled_bright_high(void){     
+    oled_change_brightness(0xFF);
+    
+}
+
+void oled_bright_medium(void){         
+    oled_change_brightness(0x0F);
+}
+
+void oled_bright_low(void){        
+    oled_change_brightness(0x05);
 }

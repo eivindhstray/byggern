@@ -9,7 +9,7 @@
 typedef struct Menu {
     void (*function)() ;     //funksjon for å enten skrive til meny eller starte en prosess
     struct Menu * parent;   //en gitt meny
-    struct Menu * child[4]; //max 4 undermenyer
+    struct Menu * child[8]; //max 8 undermenyer
     int exit;
     
 }menu_t, *menu_ptr;
@@ -35,4 +35,8 @@ void write_open_message(void);
 
 void play_game(void);
 
+void menu_pause(void);
 
+void menu_brightness_high();
+
+void menu_brightness_low();

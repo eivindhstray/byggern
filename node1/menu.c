@@ -18,6 +18,7 @@ menu_ptr main_menu_build(void){
     menu_ptr main = malloc(sizeof(menu_t));
     main -> parent = NULL;
     main ->function = write_main_menu;
+    main ->exit = 0;
     for(int i = 0; i<8; i++){
         main -> child[i] = NULL;
     }
@@ -29,12 +30,10 @@ menu_ptr menu_build(){
     
     menu_ptr menu_main = main_menu_build();
     menu_ptr menu_settings = menu_add(menu_main, &write_settings_menu,0);
-    menu_ptr menu_music = menu_add(menu_main, &write_music_menu,0);
-    menu_ptr play = menu_add(NULL, &play_game,1);
-    menu_ptr settings_brightness = menu_add(menu_settings, NULL,0);
-    menu_ptr settings_fontsize = menu_add(menu_settings,NULL,0);
-    menu_ptr music_off = menu_add(menu_music, NULL,0);
-    menu_ptr mucis_on = menu_add(menu_music, NULL,0);
+    menu_ptr play = menu_add(menu_main, &play_game,1);
+    menu_ptr settings_brightness_high = menu_add(menu_settings, &menu_brightness_high,0);
+    menu_ptr settings_brightness_low = menu_add(menu_settings, &menu_brightness_low,0);
+     
     
 
     return menu_main;
@@ -46,18 +45,19 @@ menu_ptr menu_add(menu_ptr parent, void(*function)(), int exit){
     sub_menu->parent = parent;
     sub_menu->exit = exit;
 
+    
 
-    for(int i = 0; i<8; i++){
-        sub_menu->child[i] = NULL;
+    //for(int i = 0; i<8; i++){
+    //    sub_menu->child[i] = NULL;
+    //}
+
+    int i = 3;
+
+    while(parent->child[i] != NULL){
+        i++;
     }
 
-    int j = 3;
-
-    while(parent->child[j] != NULL){
-        j++;
-    }
-
-    parent->child[j]= sub_menu;
+    parent->child[i]= sub_menu;
     return sub_menu;
     
 }
@@ -70,9 +70,9 @@ void menu_init(menu_ptr menu){
     curr_menu->function();
     
     while( curr_menu->exit !=1){
-        printf("hello world%d\r\n",index);
+        
         oled_select_indicator(index);
-        if(curr_menu->child[index-1] != NULL){
+        if(curr_menu->child[index+1] != NULL){
             if(oled_scroll() == 1){
                 index +=1;
             }  
@@ -107,9 +107,8 @@ void write_main_menu(void){
     oled_select_line(3);
     print_string("SETTINGS");
     oled_select_line(4);
-    print_string("MUSIC ON/OFF");
-    oled_select_line(5);
     print_string("PLAY");
+    printf("main menu");
     
 }
 
@@ -118,10 +117,10 @@ void write_settings_menu(void){
     oled_select_line(1);
     print_string("SETTINGS MENU");
     oled_select_line(3);
-    print_string("BRIGHTNESS");
+    print_string("BRIGHTNESS HIGH");
     oled_select_line(4);
-    print_string("FONTSIZE");
-    
+    print_string("BRIGHTNESS LOW");
+    printf("settings");
     
 
 }
@@ -134,7 +133,7 @@ void write_music_menu(void){
     print_string("ON");
     oled_select_line(4);
     print_string("OFF");
-
+    printf("music");
 }
 
 void write_open_message(void){
@@ -149,7 +148,48 @@ void write_open_message(void){
     print_string("ARCADE GAME!");
 }
 
-void play_game(){
+void play_game(void){
     oled_reset();
     print_string("playing game");
+    printf("playing...");
+}
+
+
+void menu_pause(void){
+
+    if(l_button()){
+        oled_reset();
+        print_string("pause");
+        oled_select_line(2);
+        print_string("press right");
+        oled_select_line(3);
+        print_string("button");
+        oled_select_line(4);
+        print_string("to continue");
+        while(!r_button()){
+            if(r_button()){
+                oled_reset();
+                print_string("playing...");
+            }
+        }
+    }
+}
+
+
+void menu_brightness_high(){
+    oled_reset();
+    
+    oled_bright_high();
+    print_string("high brightness");
+    oled_select_line(3);
+    print_string("left to return");
+}
+
+void menu_brightness_low(){
+    oled_reset();
+    
+    oled_bright_low();
+    print_string("low brightness");
+    oled_select_line(3);
+    print_string("left to return");
 }
