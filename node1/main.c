@@ -47,8 +47,9 @@ void main(void){
 	position.id = 0b01;
 	//write_open_message();
 	//_delay_ms(5000);
+	oled_reset();
 	menu_ptr menu = menu_build();
-	//menu_init(menu);
+	menu_init(menu);
 
 	position.length = 5;
 	
@@ -58,6 +59,18 @@ void main(void){
 	//Play function defined s.t. CAN bus only on when play_game. 
 	while(1){
 		
+		if(l_button()){
+			oled_reset();
+			print_string("pause");
+			oled_select_line(2);
+			print_string("press right");
+			oled_select_line(3);
+			print_string("button");
+			oled_select_line(4);
+			print_string("to continue");
+			while(!r_button()){
+			}
+		}
 		
 		joystick_update_details(&position);
 		

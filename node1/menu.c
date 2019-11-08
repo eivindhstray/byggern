@@ -12,6 +12,8 @@
 
 //todo: Pause by pressing left button!
 
+
+
 menu_ptr main_menu_build(void){
     menu_ptr main = malloc(sizeof(menu_t));
     main -> parent = NULL;
@@ -19,36 +21,45 @@ menu_ptr main_menu_build(void){
     for(int i = 0; i<8; i++){
         main -> child[i] = NULL;
     }
+    
     return main;
 }
 
 menu_ptr menu_build(){
     
     menu_ptr menu_main = main_menu_build();
-    menu_ptr menu_settings = menu_add(menu_main, &write_settings_menu);
-    menu_ptr menu_music = menu_add(menu_main, &write_music_menu);
-    menu_ptr settings_brightness = menu_add(menu_settings, NULL);
-    menu_ptr settings_fontsize = menu_add(menu_settings,NULL);
-    menu_ptr music_off = menu_add(menu_music, NULL);
-    menu_ptr mucis_on = menu_add(menu_music, NULL);
-    //menu_ptr play = menu_add(menu_main, &play_game);
+    menu_ptr menu_settings = menu_add(menu_main, &write_settings_menu,0);
+    menu_ptr menu_music = menu_add(menu_main, &write_music_menu,0);
+    menu_ptr play = menu_add(NULL, &play_game,1);
+    menu_ptr settings_brightness = menu_add(menu_settings, NULL,0);
+    menu_ptr settings_fontsize = menu_add(menu_settings,NULL,0);
+    menu_ptr music_off = menu_add(menu_music, NULL,0);
+    menu_ptr mucis_on = menu_add(menu_music, NULL,0);
+    
 
     return menu_main;
 }
 
-menu_ptr menu_add(menu_ptr parent, void(*function)()){
-    menu_ptr child = malloc(sizeof(menu_t));
-    child->function = function;
-    child->parent = parent;
+menu_ptr menu_add(menu_ptr parent, void(*function)(), int exit){
+    menu_ptr sub_menu = malloc(sizeof(menu_t));
+    sub_menu->function = function;
+    sub_menu->parent = parent;
+    sub_menu->exit = exit;
 
-    int i = 2;
-    while(parent->child[i] != NULL){
-        i++;
+
+    for(int i = 0; i<8; i++){
+        sub_menu->child[i] = NULL;
     }
-    printf("menu build %d\n\r", i);
 
-    parent->child[i]= child;
-    return child;
+    int j = 3;
+
+    while(parent->child[j] != NULL){
+        j++;
+    }
+
+    parent->child[j]= sub_menu;
+    return sub_menu;
+    
 }
 
 void menu_init(menu_ptr menu){
@@ -58,29 +69,32 @@ void menu_init(menu_ptr menu){
     menu_ptr curr_menu = menu;
     curr_menu->function();
     
-    while(1){
+    while( curr_menu->exit !=1){
         printf("hello world%d\r\n",index);
         oled_select_indicator(index);
-        if(index <8 && index>2 && curr_menu->child[index-1] != NULL){
+        if(curr_menu->child[index-1] != NULL){
             if(oled_scroll() == 1){
                 index +=1;
-            }  //DOES THIS BRING THE ARROW UP OR DOWN?
+            }  
+        }
+        if(curr_menu->child[index-1] != NULL){
             if(oled_scroll() == -1){
                 index -=1;
             }
-
-
-            
         }
+
+
         
-        if(oled_select()==1 && curr_menu->child[index-1] != 0){
-            curr_menu = menu->child[index-1];
+        if(oled_select() == 1 && curr_menu->child[index] != NULL){
+            curr_menu = curr_menu->child[index];
             curr_menu ->function();
             
         }
-        if(oled_select() == -1){
-            curr_menu = menu->parent;
+        if(oled_select() == -1 && curr_menu->parent != NULL){
+            curr_menu = curr_menu->parent;
             curr_menu ->function();
+            index = 3;
+
         }
     }
 }
@@ -134,20 +148,8 @@ void write_open_message(void){
     oled_select_line(6);
     print_string("ARCADE GAME!");
 }
-/*
-void play_game(void){
-    oled_write_c(0xae);  //supposed to turn OLED off.
-    
-    message_t position;
-    position.id = 0b01;
-    position.length = 5;
 
-    uint8_t position_before[8];
-    joystick_update_details(&position);
-    can_should_send(position , &position_before);
-
-    for (i = 0; i < 6; i++){
-        position_before[i] = position.data[i];
-    }
-
-}*/
+void play_game(){
+    oled_reset();
+    print_string("playing game");
+}

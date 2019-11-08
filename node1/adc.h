@@ -15,3 +15,5 @@ int l_slider(void);
 int r_slider(void);
 
 int r_button(void);
+
+int l_button(void);

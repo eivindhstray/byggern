@@ -112,25 +112,31 @@ void oled_select_indicator(int row){
     oled_write_c(0x7f);         //col 127
     print_string("<-");
     oled_select_line(row);
+    
 }
 
 
 int oled_scroll(void){
     
     if (y_pos() == 0){
-        return 1;    
+        _delay_ms(200);
+        return 1; 
+           
     }
-    if (y_pos() >= 230){ //such that it does not seem that one can "select" the upper information line and the blank space.
+    if (y_pos() >= 255){ //such that it does not seem that one can "select" the upper information line and the blank space.
+        _delay_ms(200);
         return -1;
     }
     return 0;
 }
 
 int oled_select(void){
-    if(x_pos() >= 240){
+    if(x_pos() > 254){
+        _delay_ms(200);
         return 1;
     }
-    if(x_pos()< 15){
+    if(x_pos()< 1){
+        _delay_ms(200);
         return -1;
     }
     return 0;

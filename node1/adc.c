@@ -51,3 +51,7 @@ int r_button(void){
     
     return PINB&(1<<PB0);
 }
+
+int l_button(void){
+    return PINB&(1<<PB3);
+}

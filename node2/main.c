@@ -44,15 +44,16 @@ void main(void){
 	
 	sei();
 	pi_init();
+	printf("lessgo!");
 	
 	
 	while(1){
 		pi_regulator();	
 		_delay_ms(10);
-		if(message.data[4]){
-			solenoid_shoot();
-			_delay_ms(200);
-		}
+		//if(message.data[4]){
+		//	solenoid_shoot();
+		//	_delay_ms(200);
+		//}
 	}
 }
 

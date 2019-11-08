@@ -19,12 +19,12 @@ void can_init(void){
     mcp_bit_modify(MCP_CANINTE, 0b00000011,0b11);
 
     //clear interrupt flag
-    mcp_bit_modify(MCP_CANINTF, 0b00000011,0);
+    mcp_bit_modify(MCP_CANINTF, 0b00000011,0b00);
 
-    EICRB |= (1<<ISC01);
-	EIMSK |= (1<<INT2);
+    EICRB |= (1<<ISC01); //falling flank
+	EIMSK |= (1<<INT2); //INT 2
     //clear interrupt flag on PD2
-    EIFR |= (1<<INTF2);
+    EIFR |= (1<<INTF2); 
     
     //mcp_init();
 
