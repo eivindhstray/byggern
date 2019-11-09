@@ -22,6 +22,7 @@ static double motor_min;
 static double motor_max;
 volatile double d_pos;
 volatile double pos_before;
+int u;
 
 /* Implementing difficulty using K_d and K_p is more tricky that i thought. Higher values of K_p sets
 motor speed directly left. Maybe that could be a nice difficulty setting? */
@@ -56,44 +57,22 @@ void pi_regulator(void){
     if(integral < 255 & integral>0){
         integral = integral + error*T;
     }
-    int u = K_p*(error) + K_i * integral;
-    
+    u = K_p*(error) + K_i * integral;
+   
     motor_set_speed(u);
+    
 
     
 }
+
+
+
 
 void pi_update_ref(int reference){
     ref = reference;
 }
 
 void pi_init(){
-    
-    
-    //TIMSK2 = (1<<TOIE2);
-    
-    //TCCR2B = (1<<CS20) | (1<<CS21) | (1<<CS22);
 
-    motor_set_speed(255);
-    _delay_ms(1000);
-    motor_reset_toggle();
-    motor_min = motor_read_encoder();
-    motor_set_speed(0);
-    _delay_ms(1000);
-    motor_set_speed(128);
-    motor_max = motor_read_encoder();
-    _delay_ms(2000);
-    
-    
-    
-    
-    
-}
-
-ISR(TIMER2_OVF_vect){
-    cli();
-
-   
-    sei();
 }
 

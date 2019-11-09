@@ -30,11 +30,11 @@ void motor_set_speed(int joystick){
     //set PH1 to change direction, speed 0-255
     if(joystick<128){
         speed = 255-2*joystick;
-        PORTH |= (1<<PH1);
+        PORTH &=~(1<<PH1); //configure direction
     }
     else{
         speed = (joystick-128)*2;
-        PORTH &=~(1<<PH1);
+        PORTH |= (1<<PH1); //configure direction
     }
 
     if (speed > 255){

@@ -1,5 +1,6 @@
 #include "goal_sensor.h"
 #include <avr/io.h>
+#include <util/delay.h>
 
 
 void goal_sensor_init(void){
@@ -24,8 +25,18 @@ int goal_sensor_read(void){
     
     int adc_low = ADCL;
     int adc_high = ADCH;
-    printf("low %d\r\n",adc_low);
-    printf("highz %d\r\n",adc_high);
     return adc_high<<8 | adc_low;
+
+}
+
+
+int goal_score(){
+    int threshold = 400;
+    if(goal_sensor_read() < threshold){
+        printf("goal!!!");
+        _delay_ms(200);
+        return 1;
+    }
+    return 0;
 
 }
