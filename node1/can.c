@@ -64,7 +64,7 @@ void can_send_message(message_t* message){
 }
 
 int can_should_send(message_t message, uint8_t position_before[8]){
-    if ((abs(message.data[0] - position_before[0]) >3)|| (abs(message.data[1] - position_before[1])>3) || message.data[4] == 1){
+    if ((abs(message.data[0] - position_before[0]) >3)|| (abs(message.data[1] - position_before[1])>3) || (abs(message.data[3] - position_before[3])>3) || message.data[4] == 1){
 			can_send_message(&message);
 			
 		}

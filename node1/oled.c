@@ -54,6 +54,8 @@ void oled_init(void){
 }
 
 
+
+
 void oled_change_brightness(int brightness){ //0x00-0xFF         
     oled_write_c(0x81);
     oled_write_c(brightness);
@@ -87,6 +89,16 @@ void oled_select_line(int row){
     oled_write_c(0x21);        //select col and the size of col
     oled_write_c(0); 
     oled_write_c(0x7f);         //col 12;
+}
+
+void oled_select_col(int col){
+    oled_write_c(0x00 + (col % 16));
+    oled_write_c(0x00 + (col/16));
+}
+
+void oled_select_position(int row, int position){
+    oled_select_line(row);
+    oled_select_col(position);
 }
 
 void oled_remove_marker(void){
@@ -123,12 +135,12 @@ void oled_select_indicator(int row){
 
 int oled_scroll(void){
     
-    if (y_pos() == 0){
+    if (y_pos() <= 50){
         _delay_ms(200);
         return 1; 
            
     }
-    if (y_pos() >= 255){ //such that it does not seem that one can "select" the upper information line and the blank space.
+    if (y_pos() >= 205){ //such that it does not seem that one can "select" the upper information line and the blank space.
         _delay_ms(200);
         return -1;
     }
@@ -136,11 +148,11 @@ int oled_scroll(void){
 }
 
 int oled_select(void){
-    if(x_pos() > 254){
+    if(x_pos() >= 205){
         _delay_ms(200);
         return 1;
     }
-    if(x_pos()< 1){
+    if(x_pos() <= 50){
         _delay_ms(200);
         return -1;
     }

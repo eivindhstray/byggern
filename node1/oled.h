@@ -3,7 +3,10 @@ typedef enum SCREEN{MAIN,PLAY,SETTINGS,MUSIC}screen_t;
 
 void oled_write_c(char command);
 
+
 void oled_write_char(char letter);
+
+void oled_write_data(int data);
 
 void oled_init(void);
 
@@ -12,6 +15,8 @@ void oled_change_brightness(int brightness);
 void oled_reset(void);
 
 void oled_select_line(int row);
+
+void oled_select_col(int col);
 
 void print_string(char* content);
 
@@ -28,3 +33,6 @@ void  oled_bright_high(void);
 void oled_bright_medium(void);
 
 void oled_bright_low(void);
+
+void oled_select_position(int row, int position);
+

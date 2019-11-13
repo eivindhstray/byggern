@@ -13,6 +13,8 @@ void motor_init(void){
     
 
     DDRK = 0x00;
+    motor_reset_toggle();
+    
 
     
 }
@@ -46,7 +48,7 @@ void motor_set_speed(int joystick){
     
 
 
-    char speed_to_motor = speed*0.35;
+    char speed_to_motor = speed*0.5;
 
     unsigned char msg[] = {80,0,speed_to_motor};
 

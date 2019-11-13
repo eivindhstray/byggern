@@ -3,6 +3,8 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include <util/delay.h>
+#include <inttypes.h>
+#include "uart.h"
 
 
 void SRAM_initialize(void){
@@ -41,5 +43,18 @@ void SRAM_test(void){
         }
     }
     printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n\r", write_errors, retrieval_errors);
+}
+
+void sram_write(int address, int data){
+    uint8_t dat = data;
+    uint16_t addr = address;
+    volatile char *ext_ram = (char *) 0x1800;
+    ext_ram[addr] = dat;
+}
+
+int sram_read(int address){
+    uint16_t addr = address;
+    volatile char *ext_ram = (char *) 0x1800;
+    return ext_ram[addr];
 }
 

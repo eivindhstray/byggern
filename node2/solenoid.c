@@ -49,7 +49,3 @@ void solenoid_shoot(void){
 }
 
 
-
-ISR(TIMER2_OVF_vect){
-   
-}

@@ -45,12 +45,6 @@ menu_ptr menu_add(menu_ptr parent, void(*function)(), int exit){
     sub_menu->parent = parent;
     sub_menu->exit = exit;
 
-    
-
-    //for(int i = 0; i<8; i++){
-    //    sub_menu->child[i] = NULL;
-    //}
-
     int i = 3;
 
     while(parent->child[i] != NULL){

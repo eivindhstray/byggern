@@ -7,8 +7,6 @@ void motor_disable(void);
 
 void motor_set_speed(int value);
 
-int motor_pi_regulator(int position, int speed);
-
 void motor_reset_toggle(void);
 
 int motor_read_encoder(void);

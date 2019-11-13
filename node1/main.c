@@ -16,6 +16,7 @@
 #include "can.h"
 #include "joystick.h"
 #include <avr/interrupt.h>
+#include "draw.h"
 
 
 #include <stdio.h>
@@ -41,6 +42,8 @@ void main_init(){
 }
 
 void main(void){
+	//oled_reset();
+	//draw_game();
 	cli();
 	main_init();
 	message_t position;
@@ -51,6 +54,9 @@ void main(void){
 	oled_reset();
 	menu_ptr menu = menu_build();
 	menu_init(menu);
+	SRAM_test();
+	message_t test;
+
 	
 
 	position.length = 5;
@@ -63,7 +69,9 @@ void main(void){
 		menu_pause();
 		
 		
+		
 		joystick_update_details(&position);
+		printf("pos_slider%d\n\r",position.data[3]);	
 		
 		can_should_send(position, &position_before); //only send if there is actually a change of information to
 		//be sent to node2	
