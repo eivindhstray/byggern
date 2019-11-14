@@ -17,6 +17,7 @@
 #include "joystick.h"
 #include <avr/interrupt.h>
 #include "draw.h"
+#include "music_signal.h"
 
 
 #include <stdio.h>
@@ -46,22 +47,25 @@ void main(void){
 	//draw_game();
 	cli();
 	main_init();
+	music_init();
+	music_timer_init();
 	message_t position;
 	position.id = 0b01;
 	oled_change_brightness(0xFF);
 	write_open_message();
-	_delay_ms(5000);
+
 	oled_reset();
 	menu_ptr menu = menu_build();
 	menu_init(menu);
 	SRAM_test();
 	message_t test;
-
 	
 
 	position.length = 5;
 	
 	uint8_t position_before[8];
+
+	sei();
 	
 	
 	//Play function defined s.t. CAN bus only on when play_game. 
@@ -69,7 +73,7 @@ void main(void){
 		menu_pause();
 		
 		
-		
+
 		joystick_update_details(&position);
 		printf("pos_slider%d\n\r",position.data[3]);	
 		

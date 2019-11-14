@@ -29,7 +29,11 @@
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 103
 message_t message;
-int flag = 0;
+volatile int solenoid_shot = 0;
+int solenoid_timer_counter = 0;
+int right_button = 0;
+
+volatile int button_pressed = 0;
 
 uint8_t pos;
 void main(void){
@@ -40,24 +44,20 @@ void main(void){
 	goal_sensor_init();	
 	motor_enable();
 	solenoid_init();
-
-
-	
-
 	sei();
 	printf("lessgo!");
     motor_init();
 	can_init();
 	pi_init();
+	pi_timer_init();
     while(1){
-        pi_pos_regulator();
-        _delay_ms(10);
-		
-		if(message.data[4]){
+		//printf("%d\n\r",message.data[4]);
+		if( button_pressed && solenoid_shot==0 ){
+			solenoid_shot = 1;
 			solenoid_shoot();
-			message.data[4] = 0;
-			_delay_ms(200);
 		}
+		
+		
        
     }
 	
@@ -72,12 +72,25 @@ ISR(INT2_vect){
 	
 	pi_update_pos_ref(pos);
 	pwm_update_duty_cycle(servo);
+	button_pressed = message.data[4];
 	
 	
 }
 
 ISR(TIMER2_OVF_vect){
+	
 	pi_pos_regulator();
+	cli();
+	if(solenoid_timer_counter < 60 && solenoid_shot == 1){
+		solenoid_timer_counter ++;
+		
+	}
+	else if (solenoid_shot == 1){
+		solenoid_shot = 0;
+		solenoid_timer_counter = 0;
+		
+	}
+	sei();
 	TCNT2 = 0x00;
 }
 

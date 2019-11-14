@@ -10,7 +10,7 @@
 #include <avr/interrupt.h>
 
 
-int allowed = 0;
+
 
 void solenoid_init(void){
     DDRB |= (1<<PB6);
@@ -18,9 +18,7 @@ void solenoid_init(void){
 }
 
 
-void solenoid_disengage(void){
-     DDRB&=~(1<<PB6);
-}
+
 
 
 
@@ -28,10 +26,11 @@ void solenoid_disengage(void){
 void solenoid_shoot(void){
 
     //set pulse length
-    int pulse_length = 150;
-    PORTB&= ~(1<<PB6);
-    _delay_ms(pulse_length);
-    PORTB|=(1<<PB6); 
+    
+    PORTB &= ~(1<<PB6);
+    _delay_ms(200);
+    PORTB |=(1<<PB6); 
+    
     
     
     
