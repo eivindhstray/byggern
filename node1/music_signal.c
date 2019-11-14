@@ -216,6 +216,32 @@ void music_set_tone(int freq){
     //ICR3  = F_CPU*(frequency*8*2)-1;
 
     OCR1A = 4915200/(freq * 8);
+    
+}
+
+void music_disable(void){
+    TCCR1B&=~(1<<CS11);
+}
+
+void music_enable(void){
+    TCCR1B|= (1<<CS11);
+}
+
+void music_welcome(void){
+    write_open_message();
+	music_set_tone(300);
+	_delay_ms(3000);
+	music_disable();
+	_delay_ms(500);
+	music_enable();
+	music_set_tone(300);
+	_delay_ms(3000);
+	music_disable();
+    _delay_ms(1000);
+    music_enable();
+	music_set_tone(1000);
+	_delay_ms(3000);
+	music_disable();
 }
 
 

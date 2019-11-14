@@ -79,7 +79,7 @@ ISR(INT2_vect){
 
 ISR(TIMER2_OVF_vect){
 	
-	pi_pos_regulator();
+	pid_pos_regulator();
 	cli();
 	if(solenoid_timer_counter < 60 && solenoid_shot == 1){
 		solenoid_timer_counter ++;

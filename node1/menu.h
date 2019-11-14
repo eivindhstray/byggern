@@ -40,3 +40,5 @@ void menu_pause(void);
 void menu_brightness_high();
 
 void menu_brightness_low();
+
+void play_draw(void);

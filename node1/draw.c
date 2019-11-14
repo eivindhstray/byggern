@@ -3,6 +3,7 @@
 #include "draw.h"
 #include <avr/io.h>
 #include "adc.h"
+#include <util/delay.h>
 
 
 void draw_init(void){
@@ -43,12 +44,14 @@ void draw_print_sram(void){
 
 
 void draw_game(void){
-    draw_clear_screen();
+    oled_reset();
+    int x_pos = 0;
+    int y_pos = 0;
+    int marked = 0;
     
-    while(1){
-        int x_pos = 0;
-        int y_pos = 0;
-        x_pos += oled_select();
+    while(!l_button()){
+        
+        x_pos += oled_select()*8;
         y_pos += oled_scroll();
         if(x_pos <0){
             x_pos = 0;
@@ -56,14 +59,38 @@ void draw_game(void){
         if(y_pos <0){
             y_pos = 0;
         }
-        oled_select_position(x_pos,y_pos);
-        print_string("*");
-       
-        if(r_button()){
-            draw_set_bit(x_pos,y_pos);
-            draw_print_sram();
-        }
+        unsigned char full_square[8] = {0b11111111,0b11111111,0b11111111,0b11111111,0b11111111,0b11111111,0b11111111,0b11111111};
+        oled_select_position(y_pos, x_pos);
 
+        if (r_button() /*&& (oled_select() != 0 || oled_scroll() != 0)*/) {
+	        for (int i = 0; i < 8; i++) {
+                oled_write_data(full_square[i]);
+	        }
+        }
+        else {
+            oled_select_position(x_pos, y_pos);
+            oled_write_char("*");
+        }
+        /*
+        else {
+            if(oled_select() != 0 || oled_scroll() != 0 ){
+                // skrive over gammel *?
+                oled_select_position(y_pos,x_pos);
+                if(!marked){
+                    oled_write_char("*");
+                }
+                marked = 1;
+                
+            }
+
+            //oled_write_char("*");
+            oled_select_position(x_pos, y_pos);
+        }
+        if(oled_select() != 0 || oled_scroll()!= 0){
+            marked = 0;
+        }
+        */
+        _delay_ms(100);
     }
 }
 

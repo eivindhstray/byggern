@@ -8,14 +8,15 @@
 #include "motor.h"
 #include <util/delay.h>
 
+#define MOTOR_EQUILIBRIUM 128
 
 
-
-double K_p = 2;
+double K_p = 3;
 double K_i = 2;
+double K_d = 0.1;
 int ref = 0;
-double integral = 0;
-double error_prev = 0;
+volatile double integral = 0;
+volatile double error_prev = 0;
 double T = 0.01;
 int scaling_factor;
 static double motor_min;
@@ -27,7 +28,7 @@ int ref_pos = 230;
 
 
 
-void pi_pos_regulator(void){
+void pid_pos_regulator(void){
     double pos = motor_read_encoder();
     int motor_position = 255*(pos-(motor_min))/((motor_max)-(motor_min));
     
@@ -38,7 +39,14 @@ void pi_pos_regulator(void){
         integral = integral + error*T;
     }
 
-    u = K_p*(error) + K_i * integral + 128;
+    double derivative = (error-error_prev)/T;
+
+
+
+
+    u = K_p*(error) + K_i * integral + K_d * derivative + MOTOR_EQUILIBRIUM  ; 
+
+    error_prev = error;
     
     motor_set_speed(u);
 }
@@ -62,7 +70,7 @@ void pi_init(){
     motor_set_speed(255);
     _delay_ms(1000);
     motor_min = motor_read_encoder();
-    motor_set_speed(128);
+    motor_set_speed(MOTOR_EQUILIBRIUM);
 
 }
 

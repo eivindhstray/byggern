@@ -37,23 +37,22 @@ void main_init(){
 	PORTD = 0xFF;
 	MCUCR = (1 << SRE); 		//Enable external memory. SRAM init.
 	SFIOR = (1 <<  XMM2);	
-	oled_init();
 	mcp_init();
 	can_init();
 }
 
 void main(void){
-	//oled_reset();
-	//draw_game();
-	cli();
+    cli();
+	
 	main_init();
 	music_init();
 	music_timer_init();
 	message_t position;
 	position.id = 0b01;
-	oled_change_brightness(0xFF);
+	oled_init();
+	music_welcome();
 	write_open_message();
-
+	_delay_ms(5000);
 	oled_reset();
 	menu_ptr menu = menu_build();
 	menu_init(menu);
@@ -81,6 +80,7 @@ void main(void){
 		//be sent to node2	
 		
 	}
+	
 	
 }
 

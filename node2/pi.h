@@ -1,7 +1,7 @@
 
 
 
-void pi_pos_regulator(void);
+void pid_pos_regulator(void);
 
 void pi_init();
 

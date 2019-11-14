@@ -7,6 +7,7 @@
 #include "can.h"
 #include "joystick.h"
 #include <stdlib.h>
+#include "draw.h"
 
 // our pages goes from 1-8 instead of 0-7 ??
 
@@ -31,6 +32,7 @@ menu_ptr menu_build(){
     menu_ptr menu_main = main_menu_build();
     menu_ptr menu_settings = menu_add(menu_main, &write_settings_menu,0);
     menu_ptr play = menu_add(menu_main, &play_game,1);
+    menu_ptr draw = menu_add(menu_main, &play_draw,0);
     menu_ptr settings_brightness_high = menu_add(menu_settings, &menu_brightness_high,0);
     menu_ptr settings_brightness_low = menu_add(menu_settings, &menu_brightness_low,0);
      
@@ -102,6 +104,8 @@ void write_main_menu(void){
     print_string("SETTINGS");
     oled_select_line(4);
     print_string("PLAY");
+    oled_select_line(5);
+    print_string("DRAWING GAME");
     printf("main menu");
     
 }
@@ -139,12 +143,12 @@ void write_open_message(void){
     oled_select_line(5);
     print_string("WELCOME TO OUR");
     oled_select_line(6);
-    print_string("ARCADE GAME!");
+    print_string("ARCADE GAME! #");
 }
 
 void play_game(void){
     oled_reset();
-    print_string("playing game");
+    print_string("playing game ");
     printf("playing...");
 }
 
@@ -188,4 +192,17 @@ void menu_brightness_low(){
     oled_select_line(3);
     print_string("left to return");
     
+}
+
+
+void play_draw(void){
+    draw_game();
+    oled_reset();
+    oled_select_line(1);
+    print_string("left to");
+    oled_select_line(2);
+    print_string("return to");
+    oled_select_line(3);
+    print_string("main menu");
+
 }

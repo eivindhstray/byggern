@@ -93,7 +93,7 @@ void oled_select_line(int row){
 
 void oled_select_col(int col){
     oled_write_c(0x00 + (col % 16));
-    oled_write_c(0x00 + (col/16));
+    oled_write_c(0x10 + (col/16));
 }
 
 void oled_select_position(int row, int position){
