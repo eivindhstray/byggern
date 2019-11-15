@@ -5,7 +5,6 @@
 #endif
 
 
-
 typedef struct Menu {
     void (*function)() ;     //funksjon for å enten skrive til meny eller starte en prosess
     struct Menu * parent;   //en gitt meny
@@ -14,7 +13,9 @@ typedef struct Menu {
     
 }menu_t, *menu_ptr;
 
+char int_to_score(int integer);
 
+void get_score(int goals);
 
 menu_ptr main_menu_build(void);
 
@@ -22,7 +23,7 @@ menu_ptr menu_build();
 
 menu_ptr menu_add(menu_ptr parent, void(*function)(), int exit);
 
-void menu_init(menu_ptr menu);
+void menu_run(menu_ptr menu);
 
 void write_main_menu(void);
 
@@ -42,3 +43,7 @@ void menu_brightness_high();
 void menu_brightness_low();
 
 void play_draw(void);
+
+void write_win_menu(void);
+
+void write_lost_menu(void);

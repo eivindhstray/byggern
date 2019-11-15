@@ -14,6 +14,16 @@
 //todo: Pause by pressing left button!
 
 
+char int_to_ascii(int integer){
+    return integer + 48;
+}
+
+int score = 0 ;
+
+void get_score(int goals){
+    score = goals;    
+}
+
 
 menu_ptr main_menu_build(void){
     menu_ptr main = malloc(sizeof(menu_t));
@@ -58,7 +68,7 @@ menu_ptr menu_add(menu_ptr parent, void(*function)(), int exit){
     
 }
 
-void menu_init(menu_ptr menu){
+void menu_run(menu_ptr menu){
     int index = 3;
     
 
@@ -106,7 +116,7 @@ void write_main_menu(void){
     print_string("PLAY");
     oled_select_line(5);
     print_string("DRAWING GAME");
-    printf("main menu");
+    
     
 }
 
@@ -118,7 +128,7 @@ void write_settings_menu(void){
     print_string("BRIGHTNESS HIGH");
     oled_select_line(4);
     print_string("BRIGHTNESS LOW");
-    printf("settings");
+    
     
 
 }
@@ -131,7 +141,7 @@ void write_music_menu(void){
     print_string("ON");
     oled_select_line(4);
     print_string("OFF");
-    printf("music");
+    
 }
 
 void write_open_message(void){
@@ -149,7 +159,10 @@ void write_open_message(void){
 void play_game(void){
     oled_reset();
     print_string("playing game ");
-    printf("playing...");
+    oled_select_line(3);
+    oled_write_char(int_to_ascii(score));
+    print_string(" / 10 points!");
+    
 }
 
 
@@ -159,18 +172,15 @@ void menu_pause(void){
         oled_reset();
         print_string("pause");
         oled_select_line(2);
-        print_string("press right");
+        print_string("right button ->");
         oled_select_line(3);
-        print_string("button");
+        print_string("continue");
         oled_select_line(4);
-        print_string("to continue");
-        while(!r_button()){
-            if(r_button()){
-                oled_reset();
-                print_string("playing...");
-            }
-        }
+        print_string("scroll left ->");
+        oled_select_line(5);
+        print_string("main menu");
     }
+    
 }
 
 
@@ -204,5 +214,24 @@ void play_draw(void){
     print_string("return to");
     oled_select_line(3);
     print_string("main menu");
+
+}
+
+void write_win_menu(void){
+    oled_reset();
+    oled_select_line(1);
+    print_string("Congratilations");
+    oled_select_line(2);
+    print_string("you did it!");
+
+
+}
+
+void write_lost_menu(void){
+    oled_reset();
+    oled_select_line(1);
+    print_string("Better luck");
+    oled_select_line(2);
+    print_string("next time.");
 
 }

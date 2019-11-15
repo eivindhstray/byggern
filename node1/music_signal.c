@@ -228,7 +228,6 @@ void music_enable(void){
 }
 
 void music_welcome(void){
-    write_open_message();
 	music_set_tone(300);
 	_delay_ms(3000);
 	music_disable();
@@ -255,7 +254,6 @@ void music_timer_init(void){
 }
 
 ISR(TIMER0_COMP_vect){
-    printf("timeryo");
     OCR0 = 80;
 
 }

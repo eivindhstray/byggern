@@ -17,6 +17,21 @@ void goal_sensor_init(void){
     ADCSRB &= ~(1<<MUX5);
     ADCSRA |=(1<<ADEN)|(1<<ADPS0)|(1<<ADPS1)|(1<<ADPS2);
 
+
+    // set up 0100 for CTC
+    // timer 3
+    // prescale 1024
+    //COMA1,A0 = 0
+    DDRE |= (1<<PE3);
+
+    TCCR3A |= (1<<WGM32);
+
+    TCCR3B|= (1<<CS32) ;
+
+    TIMSK3 |= (1<<OCIE3A);
+
+    OCR3A = 62500;
+    
 }
 
 int goal_sensor_read(void){
@@ -31,12 +46,13 @@ int goal_sensor_read(void){
 
 
 int goal_score(){
-    int threshold = 400;
+    int threshold = 100;
     if(goal_sensor_read() < threshold){
-        printf("goal!!!");
-        _delay_ms(200);
         return 1;
     }
     return 0;
 
 }
+
+
+

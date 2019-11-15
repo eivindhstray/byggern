@@ -14,6 +14,7 @@ void oled_write_c(char command){
 }
 
 void oled_write_data(int data){
+   
     oled_data[0] = data;
 }
 

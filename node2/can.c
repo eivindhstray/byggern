@@ -49,11 +49,7 @@ void can_send_message(message_t* message){
 
 void can_receive_message(message_t* message){
 
-/* With * and /
-    uint8_t id_high = mcp_read(MCP_RXB0SIDH)*0b1000;
-    uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
-*/
-    //With shifting bits
+
     char can_intf = mcp_read(MCP_CANINTF);
     if(can_intf &(1<<0)){
         uint8_t id_high = mcp_read(MCP_RXB0SIDH)<<3;
@@ -69,13 +65,15 @@ void can_receive_message(message_t* message){
         }
         can_intf &= ~(1<<0);
         can_intf &= ~(1<<1);
+        
+
 
     }
 
     
     mcp_write(0x2C, can_intf);
     
-    
+   
    
 
 }

@@ -1,0 +1,3 @@
+
+
+enum states{MENU, PAUSE_MENU, PLAYING, WON, LOST};

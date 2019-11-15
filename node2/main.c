@@ -19,7 +19,7 @@
 #include "motor.h"
 #include "pi.h"
 #include "solenoid.h"
-#include "play.h"a
+
 
 
 #include <stdio.h>
@@ -32,11 +32,20 @@ message_t message;
 volatile int solenoid_shot = 0;
 int solenoid_timer_counter = 0;
 int right_button = 0;
+int game_over = 0;
 
 volatile int button_pressed = 0;
 
+
+message_t node1;
+
+
 uint8_t pos;
 void main(void){
+	node1.id = 0b01;	
+	node1.length = 2;
+	
+
 	cli();
 	USART_Init(MYUBRR);
 	mcp_init();
@@ -50,17 +59,25 @@ void main(void){
 	can_init();
 	pi_init();
 	pi_timer_init();
-    while(1){
-		//printf("%d\n\r",message.data[4]);
+  while(1){
 		if( button_pressed && solenoid_shot==0 ){
 			solenoid_shot = 1;
 			solenoid_shoot();
+			node1.data[0] = 1;
+			node1.data[1] = 0;
+			can_send_message(&node1);
+			
+
 		}
+		node1.data[0] = 0;
 		
-		
-       
-    }
-	
+		if(goal_score()){
+			node1.data[1] = 1;
+			node1.data[0] = 0;
+			can_send_message(&node1);
+
+		}
+	}
 }
 
 ISR(INT2_vect){
@@ -94,6 +111,13 @@ ISR(TIMER2_OVF_vect){
 	TCNT2 = 0x00;
 }
 
+/*
+ISR(TIMER3_COMPA_vect){
+	cli();
+	
+	sei();
+}
+*/
 
 ISR(BADISR_vect){
 	printf("badisr");

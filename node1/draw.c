@@ -6,41 +6,7 @@
 #include <util/delay.h>
 
 
-void draw_init(void){
-    draw_clear_screen();
-}
 
-
-void draw_clear_screen(void){
-    for(int i = 0; i<128*8; i++){
-        sram_write(i, 0);
-    }
-}
-
-void draw_set_bit(int x, int y){
-    int line = y/8;
-    int bit = y%8;
-
-    int address = x*8 + line;
-    char byte = sram_read(address);
-
-    byte |= (1<<bit);
-
-    sram_write(address,byte);
-
-}
-
-
-void draw_print_sram(void){
-    for(int cols = 0; cols<128; cols++){
-        for(int line = 0; line<8; line++){
-            int address = cols*8 +line;
-            char byte = sram_read(address);
-            oled_select_position(line,cols);
-            oled_write_data(byte);
-        }
-    }
-}
 
 
 void draw_game(void){
@@ -56,8 +22,14 @@ void draw_game(void){
         if(x_pos <0){
             x_pos = 0;
         }
+        if(x_pos > 15*8){
+            x_pos = 15*8;
+        }
         if(y_pos <0){
             y_pos = 0;
+        }
+        if(y_pos > 7){
+            y_pos = 7;
         }
         unsigned char full_square[8] = {0b11111111,0b11111111,0b11111111,0b11111111,0b11111111,0b11111111,0b11111111,0b11111111};
         oled_select_position(y_pos, x_pos);
@@ -67,29 +39,15 @@ void draw_game(void){
                 oled_write_data(full_square[i]);
 	        }
         }
-        else {
-            oled_select_position(x_pos, y_pos);
-            oled_write_char("*");
+        else if (oled_select() == 0 && oled_scroll() == 0){
+            
+            print_string("*");
+            
         }
-        /*
-        else {
-            if(oled_select() != 0 || oled_scroll() != 0 ){
-                // skrive over gammel *?
-                oled_select_position(y_pos,x_pos);
-                if(!marked){
-                    oled_write_char("*");
-                }
-                marked = 1;
-                
-            }
 
-            //oled_write_char("*");
-            oled_select_position(x_pos, y_pos);
+        else{
+            print_string(" ");
         }
-        if(oled_select() != 0 || oled_scroll()!= 0){
-            marked = 0;
-        }
-        */
         _delay_ms(100);
     }
 }
