@@ -43,6 +43,8 @@ uint8_t pos;
 void main(void){
 	node1.id = 0b01;	
 	node1.length = 2;
+	node1.data[0] = 0;
+	node1.data[1] = 0;
 	
 
 	cli();
