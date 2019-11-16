@@ -2,7 +2,6 @@
 #include "MCP2515.h"
 #include <stdint.h>
 #include <avr/io.h>
-#include "io.h"
 #include <stdio.h>
 
 

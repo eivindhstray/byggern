@@ -1,4 +1,4 @@
-#include "io.h"
+#include "sram.h"
 #include <stdint.h>
 #include <avr/io.h>
 #include <stdlib.h>
@@ -8,7 +8,6 @@
 
 
 void SRAM_initialize(void){
-    MCUCR = (1<<SRE);
     MCUCR = (1<<SRE);
 	SFIOR = (1 <<  XMM2);	
 }

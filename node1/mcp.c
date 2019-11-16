@@ -1,9 +1,6 @@
 #include "mcp.h"
 #include "MCP2515.h"
-#include <stdint.h>
-#include <stdio.h>
 #include "spi.h"
-#include <inttypes.h>
 #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/common.h>

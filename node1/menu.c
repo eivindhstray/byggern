@@ -1,8 +1,6 @@
 #include "oled.h"
 #include <stdint.h>
-#include <string.h>
 #include "adc.h"
-#include <util/delay.h>
 #include "menu.h"
 #include "can.h"
 #include "joystick.h"
@@ -223,8 +221,10 @@ void write_win_menu(void){
     print_string("Congratilations");
     oled_select_line(2);
     print_string("you did it!");
-
-
+    oled_select_line(4);
+    print_string("Left to");
+    oled_select_line(5);
+    print_string("main menu.");
 }
 
 void write_lost_menu(void){
@@ -233,5 +233,8 @@ void write_lost_menu(void){
     print_string("Better luck");
     oled_select_line(2);
     print_string("next time.");
-
+    oled_select_line(4);
+    print_string("Left to");
+    oled_select_line(5);
+    print_string("main menu.");
 }

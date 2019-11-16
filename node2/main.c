@@ -28,16 +28,15 @@
 #define FOSC 16000000UL
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 103
-message_t message;
 volatile int solenoid_shot = 0;
-int solenoid_timer_counter = 0;
-int right_button = 0;
-int game_over = 0;
-
+volatile int solenoid_timer_counter = 0;
+volatile int right_button = 0;
+volatile int game_over = 0;
 volatile int button_pressed = 0;
 
 
 message_t node1;
+message_t message;
 
 
 uint8_t pos;
@@ -54,28 +53,25 @@ void main(void){
 	motor_enable();
 	solenoid_init();
 	sei();
-	printf("lessgo!");
     motor_init();
 	can_init();
 	pi_init();
 	pi_timer_init();
   while(1){
+	  	node1.data[0] = 0; //score++
+		node1.data[1] = 0; //gameover
 		if( button_pressed && solenoid_shot==0 ){
 			solenoid_shot = 1;
 			solenoid_shoot();
 			node1.data[0] = 1;
 			node1.data[1] = 0;
 			can_send_message(&node1);
-			
-
 		}
-		node1.data[0] = 0;
-		
 		if(goal_score()){
 			node1.data[1] = 1;
 			node1.data[0] = 0;
 			can_send_message(&node1);
-
+			printf("Sending game failed");
 		}
 	}
 }
@@ -111,6 +107,11 @@ ISR(TIMER2_OVF_vect){
 	TCNT2 = 0x00;
 }
 
+
+ISR(BADISR_vect){
+	printf("badisr");
+}
+
 /*
 ISR(TIMER3_COMPA_vect){
 	cli();
@@ -118,10 +119,4 @@ ISR(TIMER3_COMPA_vect){
 	sei();
 }
 */
-
-ISR(BADISR_vect){
-	printf("badisr");
-}
-
-
 

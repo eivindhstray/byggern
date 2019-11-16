@@ -21,9 +21,11 @@ void can_init(void){
     //clear interrupt flag
     mcp_bit_modify(MCP_CANINTF, 0b00000011,0b00);
 
-    GICR |= (1 << INT0); // Skrur på INT0-interrupt
-	MCUCR |= (1 << ISC01); // Setter interrupts til å funke på fallende kant
-	MCUCR &= ~(1 << ISC00); // ...
+
+    //enable INT0 to update whenever information is sent from node2
+    GICR |= (1 << INT0); 
+	MCUCR |= (1 << ISC01); 
+	MCUCR &= ~(1 << ISC00); 
 	DDRD &=  ~(1 << PIND2);
 
     //mcp_init();
@@ -56,26 +58,15 @@ void can_send_message(message_t* message){
 int can_should_send(message_t message, uint8_t position_before[8]){
     if ((abs(message.data[0] - position_before[0]) >3)|| (abs(message.data[1] - position_before[1])>3) || 
     (abs(message.data[3] - position_before[3])>3) || (abs(message.data[4] - position_before[4])>0)){
-			can_send_message(&message);
-			
+			can_send_message(&message);	
 		}
-	
-		
 		for(int i = 0; i<8; i++){
 			position_before[i] = message.data[i];
-		}
-		
+		}	
 }
 
 
-message_t can_receive_message(message_t *message){
-
-/* With * and /
-    uint8_t id_high = mcp_read(MCP_RXB0SIDH)*0b1000;
-    uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
-*/
-    //With shifting bits
-    
+message_t can_receive_message(message_t *message){    
 
     uint8_t id_high = mcp_read(MCP_RXB0SIDH)<<3;
     uint8_t id_low = mcp_read(MCP_RXB0SIDL)>>5;

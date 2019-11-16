@@ -4,7 +4,7 @@
 #define F_CPU 4915200UL
 #endif
 
-#include "io.h"
+#include "sram.h"
 #include "adc.h"
 #include <stdint.h>
 #include <avr/io.h>
@@ -19,6 +19,7 @@
 #include "draw.h"
 #include "music_signal.h"
 #include "states.h"
+#include "menu.h"
 
 
 #include <stdio.h>
@@ -26,7 +27,7 @@
 #define BAUD 9600
 //#define MYUBRR FOSC/16/BAUD-1
 #define MYUBRR 31
-#include "menu.h"
+
 
 message_t node2;
 volatile int points = 0;
@@ -45,13 +46,12 @@ void main(void){
 	
 	DDRA = 0xFF; //define PORTA as output
 	DDRB = 0xFF; //define PORTB as output
-	r_button_init();
 	DDRE = 0xFF;
-	USART_Init(MYUBRR);
 	DDRD = 0x00;
 	PORTD = 0xFF;
 	MCUCR = (1 << SRE); 		//Enable external memory. SRAM init.
-	SFIOR = (1 <<  XMM2);	
+	USART_Init(MYUBRR);
+	r_button_init();	
 	mcp_init();
 	can_init();
 	music_init();
@@ -77,6 +77,8 @@ void main(void){
 	sei();
 
 	state = MENU;
+
+	int writemenu;
 	
 	
 	//Play function defined s.t. CAN bus only on when play_game. 
@@ -84,24 +86,19 @@ void main(void){
 		switch(state){
 
 		case(PLAYING):
-			printf("playing");
+			
 			joystick_update_details(&position);
 				
 			can_should_send(position, &position_before); //only send if there is actually a change of information to
 				//be sent to node2
-			
 			if(game_over){
-				
-				write_lost_menu();
-				_delay_ms(2000);
-				state = MENU;
+				writemenu = 1;
+				state = LOST;
 			}
 
 			if(points > 9){
-				
-				write_win_menu();
-				_delay_ms(2000);
-				state = MENU;
+				writemenu = 1;
+				state = WON;
 			}
 
 			if(point_change){
@@ -124,16 +121,12 @@ void main(void){
 			menu_run(menu);
 			oled_reset();
 			play_game();
-			
 			state = PLAYING;
-
 			break;
 
 		
 		case(PAUSE_MENU):
-
 			menu_pause();
-
 			if(r_button()){
 				play_game();
 				state = PLAYING;
@@ -143,7 +136,26 @@ void main(void){
 				state = MENU;
 				point_change = 0;
 			}
+			break;
 
+		case(WON):
+			if (writemenu == 1){
+				write_win_menu();
+				writemenu = 0;
+			}
+			if(oled_select() == -1){
+				state = MENU;
+			}
+			break;
+
+		case(LOST):
+			if (writemenu == 1){
+				write_lost_menu();
+				writemenu = 0;
+			}
+			if(oled_select() == -1){
+				state = MENU;
+			}
 			break;
 
 		}
